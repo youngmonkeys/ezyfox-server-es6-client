@@ -1,5 +1,7 @@
 class EzyAppDataHandler {
-    handlers = {};
+    constructor() {
+        this.handlers = {};
+    }
 
     addHandler(cmd, handler) {
         this.handlers[cmd] = handler;

@@ -20,29 +20,28 @@ import EzyUnlogCommands from './ezy-unlog-commands'
 import EzyUser from './ezy-user'
 import EzyZone from './ezy-zone'
 
-const Ezy = Ezy || {};
-Ezy.AppAccessHandler = EzyAppAccessHandler;
-Ezy.AppDataHandler = EzyAppDataHandler;
-Ezy.AppResponseHandler = EzyAppResponseHandler;
-Ezy.App = EzyApp;
-Ezy.Client = EzyClient;
-Ezy.Clients = EzyClients;
-Ezy.Command = EzyCommand;
-Ezy.Commands = EzyCommands;
-Ezy.ConnectionEventHandler = EzyConnectionEventHandler;
-Ezy.DisconnectReason = EzyDisconnectReason;
-Ezy.DisconnectionEventHandler = EzyDisconnectionEventHandler;
-Ezy.EventType = EzyEventType;
-Ezy.Guid = EzyGuid;
-Ezy.HandshakeHandler = EzyHandshakeHandler;
-Ezy.LoginHandler = EzyLoginHandler;
-Ezy.MessageEventHandler = EzyMessageEventHandler;
-Ezy.PongHandler = EzyPongHandler;
-Ezy.RSAKeyPairGenerator = EzyRSAKeyPairGenerator;
-Ezy.UnlogCommands = EzyUnlogCommands;
-Ezy.User = EzyUser;
-Ezy.Zone = EzyZone;
+const Ezy = {
+    AppAccessHandler            : EzyAppAccessHandler,
+    AppDataHandler              : EzyAppDataHandler,
+    AppResponseHandler          : EzyAppResponseHandler,
+    App                         : EzyApp,
+    Client                      : EzyClient,
+    Clients                     : EzyClients,
+    Command                     : EzyCommand,
+    Commands                    : EzyCommands,
+    ConnectionEventHandler      : EzyConnectionEventHandler,
+    DisconnectReason            : EzyDisconnectReason,
+    DisconnectionEventHandler   : EzyDisconnectionEventHandler,
+    EventType                   : EzyEventType,
+    Guid                        : EzyGuid,
+    HandshakeHandler            : EzyHandshakeHandler,
+    LoginHandler                : EzyLoginHandler,
+    MessageEventHandler         : EzyMessageEventHandler,
+    PongHandler                 : EzyPongHandler,
+    RSAKeyPairGenerator         : EzyRSAKeyPairGenerator,
+    UnlogCommands               : EzyUnlogCommands,
+    User                        : EzyUser,
+    Zone                        : EzyZone
+}
 
-Object.freeze(Ezy);
-
-export default Ezy;
+export default Ezy

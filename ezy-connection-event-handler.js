@@ -1,6 +1,5 @@
 import EzyCommand from './ezy-command'
 import EzyGuid from './ezy-guid'
-import EzyRSAKeyPairGenerator from './ezy-rsa-keypair-generator'
 
 class EzyConnectionEventHandler {
 
@@ -14,15 +13,15 @@ class EzyConnectionEventHandler {
     }
 
     sendHandshake(context) {
-        var keyPair = this.loadKeyPair();
         var clientId = this.getClientId();
-        var clientKey = keyPair.getPublicBaseKeyB64();
-        var reconnectToken = this.getReconnectToken();
-        var request = [clientId, clientKey, reconnectToken, this.clientType, this.clientVersion];
+        var clientKey = getClientKey();
+        var enableEncryption = this.isEnableEncryption();
+        var token = this.getToken();
+        var request = [clientId, clientKey, this.clientType, this.clientVersion, enableEncryption, token];
         context.sendRequest(EzyCommand.HANDSHAKE, request);
     }
 
-    getReconnectToken() {
+    getClientKey() {
         return "";
     }
 
@@ -30,11 +29,14 @@ class EzyConnectionEventHandler {
         return EzyGuid.generate();
     }
 
-    loadKeyPair() {
-        var keyPairGenerator = new EzyRSAKeyPairGenerator();
-        var keyPair = keyPairGenerator.generateKeyPair(1024);
-        return keyPair;
+    isEnableEncryption() {
+        return false;
     }
+
+    getToken() {
+        return "";
+    }
+
 }
 
 export default EzyConnectionEventHandler

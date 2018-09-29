@@ -15,7 +15,6 @@ import EzyHandshakeHandler from './ezy-handshake-handler'
 import EzyLoginHandler from './ezy-login-handler'
 import EzyMessageEventHandler from './ezy-message-event-handler'
 import EzyPongHandler from './ezy-pong-handler'
-import EzyRSAKeyPairGenerator from './ezy-rsa-keypair-generator'
 import EzyUnlogCommands from './ezy-unlog-commands'
 import EzyUser from './ezy-user'
 import EzyZone from './ezy-zone'
@@ -38,7 +37,6 @@ const Ezy = {
     LoginHandler                : EzyLoginHandler,
     MessageEventHandler         : EzyMessageEventHandler,
     PongHandler                 : EzyPongHandler,
-    RSAKeyPairGenerator         : EzyRSAKeyPairGenerator,
     UnlogCommands               : EzyUnlogCommands,
     User                        : EzyUser,
     Zone                        : EzyZone

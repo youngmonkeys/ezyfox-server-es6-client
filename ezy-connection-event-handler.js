@@ -4,7 +4,7 @@ import EzyGuid from './ezy-guid'
 class EzyConnectionEventHandler {
 
     constructor() {
-        this.clientType = "JAVASCRIPT";
+        this.clientType = "JEMACS6";
         this.clientVersion = "1.0.0";
     }
 
@@ -14,7 +14,7 @@ class EzyConnectionEventHandler {
 
     sendHandshake(context) {
         var clientId = this.getClientId();
-        var clientKey = getClientKey();
+        var clientKey = this.getClientKey();
         var enableEncryption = this.isEnableEncryption();
         var token = this.getToken();
         var request = [clientId, clientKey, this.clientType, this.clientVersion, enableEncryption, token];

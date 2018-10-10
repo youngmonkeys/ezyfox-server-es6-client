@@ -1,13 +1,16 @@
 class EzyAppResponseHandler {
-    handle(context, data) {
+    handle(data) {
         var appId = data[0];
         var responseData = data[1];
-        var app = context.zone.appsById[appId];
-        var handler = app.dataHandler;
+        var cmd = responseData[0];
+        var commandData = responseData[1];
+
+        var app = this.client.getAppById(appId);
+        var handler = app.getDataHandler(cmd);
         if(handler)
-            handler.handle(app, responseData);
+            handler.handle(app, commandData);
         else
-            console.log("app: " + app.name + " has no handler");
+            console.log("app: " + app.name + " has no handler for command: " + cmd);
     }
 }
 

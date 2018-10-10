@@ -1,23 +1,26 @@
 import EzyApp from './ezy-app'
 
 class EzyAppAccessHandler {
-    handle(context, data) {
-        var appId = data[0];
-        var appName = data[1];
-        var app = new EzyApp(context, appId, appName);
-        var zone = context.zone;
-        var me = zone.me;
-        zone.addApp(app);
-        me.addJoinedApp(app);
-        this.handleAccessAppSuccess(context, app);
-    }
-
-    handleAccessApp(context, app) {
+    handle(data) {
+        var zoneId = data[0];
+        var zoneManager = this.client.zoneManager;
+        var zone = zoneManager.getZoneById(zoneId);
+        var appManager = zone.appManager;
+        var app = this.newApp(zone, data);
+        appManager.addApp(app);
+        this.client.addApp(app);
+        this.postHandle(app, data);
         console.log("access app: " + app.name + " successfully");
-        this.handleAccessAppSuccess(context, app);
     }
 
-    handleAccessAppSuccess(context, app) {
+    newApp(zone, data) {
+        var appId = data[1];
+        var appName = data[2];
+        var app = new EzyApp(this.client, zone, appId, appName);
+        return app;
+    }
+
+    postHandle(app, data) {
     }
 }
 

@@ -1,24 +1,33 @@
 import EzyCommand from './ezy-command'
 import EzyGuid from './ezy-guid'
 
-class EzyConnectionEventHandler {
+class EzyConnectionSuccessHandler {
 
     constructor() {
-        this.clientType = "JEMACS6";
+        this.clientType = "JSEMACS6";
         this.clientVersion = "1.0.0";
     }
 
-    handle(context) {
-        this.sendHandshake(context);
+    handle() {
+        this.sendHandshakeRequest();
+        this.postHandle();
     }
 
-    sendHandshake(context) {
+    postHandle() {
+    }
+
+    sendHandshakeRequest() {
+        var request = this.newHandshakeRequest();
+        this.client.sendRequest(EzyCommand.HANDSHAKE, request);
+    }
+
+    newHandshakeRequest() {
         var clientId = this.getClientId();
         var clientKey = this.getClientKey();
         var enableEncryption = this.isEnableEncryption();
         var token = this.getToken();
         var request = [clientId, clientKey, this.clientType, this.clientVersion, enableEncryption, token];
-        context.sendRequest(EzyCommand.HANDSHAKE, request);
+        return request;
     }
 
     getClientKey() {
@@ -39,4 +48,4 @@ class EzyConnectionEventHandler {
 
 }
 
-export default EzyConnectionEventHandler
+export default EzyConnectionSuccessHandler

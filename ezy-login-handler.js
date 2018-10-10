@@ -3,7 +3,7 @@ import EzyZone from './ezy-zone'
 import EzyUser from './ezy-user'
 
 class EzyLoginHandler {
-    handle(context, data) {
+    handle(data) {
         var zoneId = data[0];
         var zoneName = data[1];
         var userId = data[2];
@@ -11,33 +11,35 @@ class EzyLoginHandler {
         var joinedAppArray = data[4];
         var responseData = data[5];
 
-        var zone = new EzyZone(zoneId, zoneName);
+        var zone = new EzyZone(this.client, zoneId, zoneName);
         var user = new EzyUser(userId, username);
+        var zoneManager = this.client.zoneManager;
         zone.me = user;
-        context.zone = zone;
-        this.handleResponseAppDatas(context, joinedAppArray);
-        this.handleResponseData(context, responseData);
+        zoneManager.addZone(zone);
+        this.handleResponseAppDatas(zoneId, joinedAppArray);
+        this.handleResponseData(responseData);
         if(joinedAppArray.length <= 0)
-            this.handleLoginSuccess(context, responseData);
+            this.handleLoginSuccess(responseData);
         else
-            this.handleReconnectSuccess(context, responseData);
+            this.handleReconnectSuccess(responseData);
         console.log("user: " + user.name + " logged in successfully");
     }
     
-    handleResponseData(context, data) {
+    handleResponseData(data) {
     }
 
-    handleResponseAppDatas(context, appDatas) {
-        var appAccessHandler = context.getDataHandler(EzyCommand.APP_ACCESS);
+    handleResponseAppDatas(zoneId, appDatas) {
+        var handlerManager = this.client.handlerManager;
+        var appAccessHandler = handlerManager.getDataHandler(EzyCommand.APP_ACCESS);
         appDatas.forEach(app => {
-            appAccessHandler.handle(context, app);
+            appAccessHandler.handle([zoneId].concat(app));
         });
     }
 
-    handleLoginSuccess(context, data) {
+    handleLoginSuccess(data) {
     }
 
-    handleReconnectSuccess(context, data) {
+    handleReconnectSuccess(data) {
     }
 }
 

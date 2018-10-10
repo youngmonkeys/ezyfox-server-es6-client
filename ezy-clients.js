@@ -1,7 +1,7 @@
 class EzyClients {
     constructor() {
         this.clients = {};
-        this.defaultClientName = "defaultClient";
+        this.defaultClientName = "___ezyfox_client___";
     }
 
     static getInstance() {
@@ -11,12 +11,13 @@ class EzyClients {
         return EzyClients.instance;
     }
 
-    addClient(name, client) {
-        this.clients[name] = client;
+    addClient(client) {
+        this.clients[client.name] = client;
     }
 
     addDefaultClient(client) {
-        this.clients[this.defaultClientName] = client;
+        client.name = this.defaultClientName;
+        this.addClient(client);
     }
 
     removeClient(clientName) {
@@ -37,7 +38,8 @@ class EzyClients {
 
     isConnectedClient(clientName) {
         var client = this.getClient(clientName);
-        return client && client.connected;
+        var connected = client && client.connected;
+        return connected;
     }
 
     isConnectedDefaultClient() {

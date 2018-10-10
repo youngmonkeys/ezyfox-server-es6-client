@@ -2,23 +2,27 @@ import EzyCommand from './ezy-command'
 
 class EzyHandshakeHandler {
 
-	handle(context, data) {
-		this.sendLoginRequest(context);
-		this.startPing(context);
+	handle(data) {
+		this.startPing();
+		this.handleLogin();
+		this.postHandle(data);
 	}
 
-	startPing(context) {
-		context.startPing();
-	}
+	postHandle(data) {
+    }
 
-	sendLoginRequest(context) {
-		var loginRequest = this.newLoginRequest(context);
-		context.sendRequest(EzyCommand.LOGIN, loginRequest);
+	handleLogin() {
+		var loginRequest = this.getLoginRequest();
+		this.client.sendRequest(EzyCommand.LOGIN, loginRequest);
     }
     
-    newLoginRequest(context) {
+    getLoginRequest() {
         return ["test", "test", "test", []];
-    }
+	}
+	
+	startPing() {
+		this.client.pingSchedule.start();
+	}
 }
 
 export default EzyHandshakeHandler

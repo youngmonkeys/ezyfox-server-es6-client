@@ -8,8 +8,8 @@ const EzyDisconnectReason = {
     MAX_REQUEST_PER_SECOND : {id : 6, name : "MAX_REQUEST_PER_SECOND"},
     MAX_REQUEST_SIZE : {id : 7, name : "MAX_REQUEST_SIZE"},
     SERVER_ERROR : {id : 8, name : "SERVER_ERROR"},
-    SERVER_NOT_RESPONSE : {id : 300, name : "SERVER_NOT_RESPONSE"},
-    CONNECTION_REFUSE : {id : 301, name : "CONNECTION_REFUSE"}
+    SERVER_NOT_RESPONDING : {id : 400, name : "SERVER_NOT_RESPONSE"},
+    CONNECTION_REFUSE : {id : 401, name : "CONNECTION_REFUSE"}
 }
 
 export default EzyDisconnectReason

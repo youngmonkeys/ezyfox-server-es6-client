@@ -8,7 +8,7 @@ class EzyAppResponseHandler {
         var app = this.client.getAppById(appId);
         var handler = app.getDataHandler(cmd);
         if(handler)
-            handler.handle(app, commandData);
+            handler(app, commandData);
         else
             console.log("app: " + app.name + " has no handler for command: " + cmd);
     }

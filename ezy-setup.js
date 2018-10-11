@@ -1,4 +1,4 @@
-import EzyAppDataHandlers from './ezy-app-data-handler'
+import EzyAppDataHandlers from './ezy-app-data-handlers'
 
 class EzySetup {
     constructor(handlerManager) {
@@ -19,7 +19,7 @@ class EzySetup {
     setupZone(zoneName) {
         var zoneSetup = this.zoneSetups[zoneName];
         if(!zoneSetup) {
-            var appDataHandlerss = this.handlerManager.getDataHandlers(zoneName);
+            var appDataHandlerss = this.handlerManager.getAppDataHandlerss(zoneName);
             zoneSetup = new EzyZoneSetup(appDataHandlerss, this);
         }
         return zoneSetup;

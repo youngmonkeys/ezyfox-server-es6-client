@@ -19,8 +19,8 @@ class EzyConnector {
     }
 
     connect (client, url) {
-
         this.ws = new WebSocket(url);
+        var pingManager = client.pingManager;
         var eventMessageHandler = client.eventMessageHandler;
 
         this.ws.onerror = function (e) {
@@ -48,7 +48,7 @@ class EzyConnector {
         }
 
         this.ws.onmessage = function (event) {
-            client.lostPingCount = 0;
+            pingManager.lostPingCount = 0;
             var data = event.data;
             var message = JSON.parse(data);
             eventMessageHandler.handleMessage(message);
@@ -111,7 +111,7 @@ class EzyClient {
     }
 
     onDisconnected(reason) {
-        console.log('disconnect with: ' + this.url + ", reason: " + reason);
+        console.log('disconnect with: ' + this.url + ", reason: " + reason.name);
         this.status = EzyConnectionStatus.DISCONNECTED;
         this.pingSchedule.stop();
         this.disconnect();

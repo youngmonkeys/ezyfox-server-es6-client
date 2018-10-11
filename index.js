@@ -16,7 +16,6 @@ import EzyHandshakeHandler from './ezy-handshake-handler'
 import EzyLoginHandler from './ezy-login-handler'
 import EzyPongHandler from './ezy-pong-handler'
 import EzyAppAccessHandler from './ezy-app-access-handler'
-import EzyAppDataHandler from './ezy-app-data-handler'
 import EzyAppResponseHandler from './ezy-app-response-handler'
 
 
@@ -38,7 +37,6 @@ const Ezy = {
     HandshakeHandler            : EzyHandshakeHandler,
     LoginHandler                : EzyLoginHandler,
     AppAccessHandler            : EzyAppAccessHandler,
-    AppDataHandler              : EzyAppDataHandler,
     AppResponseHandler          : EzyAppResponseHandler,
     PongHandler                 : EzyPongHandler
 }

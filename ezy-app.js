@@ -13,6 +13,11 @@ class EzyApp {
         var requestData = [this.id, [cmd, data]];
         this.client.sendRequest(EzyCommand.APP_REQUEST, requestData);
     }
+
+    getDataHandler(cmd) {
+        var handler = this.dataHandlers.getHandler(cmd);
+        return handler;
+    }
 }
 
 export default EzyApp

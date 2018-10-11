@@ -21,7 +21,7 @@ class EzyEventMessageHandler {
     }
 
     handleDisconnection(reason) {
-        this.client.onDisconected(reason);
+        this.client.onDisconnected(reason);
         var event = new EzyDisconnectionEvent(reason);
         this.handleEvent(event);
     }

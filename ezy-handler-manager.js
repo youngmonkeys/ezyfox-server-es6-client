@@ -62,15 +62,6 @@ class EzyHandlerManager {
     addEventHandler(eventType, eventHandler) {
         this.eventHandlers.addHandler(eventType, eventHandler);
     }
-
-    getDataHandlers(zoneName) {
-        var appDataHandlerss = this.zoneAppDataHandlerss[zoneName];
-        if(!appDataHandlerss) {
-            appDataHandlerss = {};
-            this.zoneAppDataHandlerss[zoneName] = appDataHandlerss;
-        }
-        return appDataHandlerss;
-    }
 }
 
 export default EzyHandlerManager

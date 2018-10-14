@@ -1,10 +1,9 @@
-
 import EzyConnectionStatus from './ezy-connection-status'
 
-class EzyDisconnectionHandler {
+class EzyConnectionFailureHandler {
+
     handle(event) {
-        console.log("handle disconnection, reason = " + event.reason);
-        this.preHandle(event);
+        console.log("connection failure, reason = " + event.reason);
         var config = this.client.config;
         var reconnectConfig = config.reconnect;
         var should = this.shouldReconnect(event);
@@ -18,15 +17,13 @@ class EzyDisconnectionHandler {
         }
     }
 
-    preHandle(event) {
-    }
-
     shouldReconnect(event) {
         return true;
     }
 
     control(event) {
     }
+
 }
 
-export default EzyDisconnectionHandler
+export default EzyConnectionFailureHandler

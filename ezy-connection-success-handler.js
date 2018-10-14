@@ -25,7 +25,7 @@ class EzyConnectionSuccessHandler {
         var clientId = this.getClientId();
         var clientKey = this.getClientKey();
         var enableEncryption = this.isEnableEncryption();
-        var token = this.getToken();
+        var token = this.getStoredToken();
         var request = [clientId, clientKey, this.clientType, this.clientVersion, enableEncryption, token];
         return request;
     }
@@ -42,7 +42,7 @@ class EzyConnectionSuccessHandler {
         return false;
     }
 
-    getToken() {
+    getStoredToken() {
         return "";
     }
 

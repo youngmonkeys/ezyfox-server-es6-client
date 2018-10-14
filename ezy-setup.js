@@ -1,9 +1,7 @@
-import EzyAppDataHandlers from './ezy-app-data-handlers'
-
 class EzySetup {
     constructor(handlerManager) {
         this.handlerManager = handlerManager;
-        this.zoneSetups = {};
+        this.appSetups = {};
     }
 
     addDataHandler(cmd, dataHandler) {
@@ -16,39 +14,14 @@ class EzySetup {
         return this;
     }
 
-    setupZone(zoneName) {
-        var zoneSetup = this.zoneSetups[zoneName];
-        if(!zoneSetup) {
-            var appDataHandlerss = this.handlerManager.getAppDataHandlerss(zoneName);
-            zoneSetup = new EzyZoneSetup(appDataHandlerss, this);
-        }
-        return zoneSetup;
-    }
-}
-
-class EzyZoneSetup {
-    constructor(appDataHandlerss, parent) {
-        this.parent = parent;
-        this.appSetups = {};
-        this.appDataHandlerss = appDataHandlerss;
-    }
-
     setupApp(appName) {
         var appSetup = this.appSetups[appName];
         if(!appSetup) {
-            var handlers = this.appDataHandlerss[appName];
-            if(!handlers) {
-                handlers = new EzyAppDataHandlers();
-                this.appDataHandlerss[appName] = handlers;
-            }
-            appSetup = new EzyAppSetup(handlers, this);
+            var appDataHandlers = this.handlerManager.getAppDataHandlers(appName);
+            appSetup = new EzyAppSetup(appDataHandlers, this);
             this.appSetups[appName] = appSetup;
         }
         return appSetup;
-    }
-    
-    done() {
-        return this.parent;
     }
 }
 

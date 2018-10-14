@@ -1,7 +1,9 @@
+import EzyClient from './ezy-client'
+
 class EzyClients {
     constructor() {
         this.clients = {};
-        this.defaultClientName = "___ezyfox_client___";
+        this.defaultClientName = "";
     }
 
     static getInstance() {
@@ -11,21 +13,22 @@ class EzyClients {
         return EzyClients.instance;
     }
 
+    newClient(config) {
+        var client = new EzyClient(config);
+        this.addClient(client);
+        if(this.defaultClientName == "")
+            this.defaultClientName = client.name;
+        return client;
+    }
+
+    newDefaultClient(config) {
+        var client = this.newClient(config);
+        this.defaultClientName = client.name;
+        return client;
+    }
+
     addClient(client) {
         this.clients[client.name] = client;
-    }
-
-    addDefaultClient(client) {
-        client.name = this.defaultClientName;
-        this.addClient(client);
-    }
-
-    removeClient(clientName) {
-        delete this.clients[clientName];
-    }
-
-    removeDefaultClient() {
-        delete this.clients[this.defaultClientName];
     }
 
     getClient(clientName) {
@@ -34,16 +37,6 @@ class EzyClients {
 
     getDefaultClient() {
         return this.clients[this.defaultClientName];
-    }
-
-    isConnectedClient(clientName) {
-        var client = this.getClient(clientName);
-        var connected = client && client.connected;
-        return connected;
-    }
-
-    isConnectedDefaultClient() {
-        return this.isConnectedClient(this.defaultClientName);
     }
 }
 

@@ -2,7 +2,6 @@
 import EzyCommand from './ezy-command'
 import EzyDisconnectReason from './ezy-disconnect-reason'
 import EzyConnectionStatus from './ezy-connection-status'
-import EzyZoneManager from './ezy-zone-manager'
 import EzyPingManager from './ezy-ping-manager'
 import EzyPingSchedule from './ezy-ping-schedule'
 import EzyHandlerManager from './ezy-handler-manager'
@@ -11,7 +10,7 @@ import EzyEventMessageHandler from './ezy-event-message-handler'
 import EzyConnectionSuccessEvent from './ezy-connection-success-event'
 import EzyConnectionFailedReason from './ezy-connection-failed-reason'
 import EzyConnectionFailureEvent from './ezy-connection-failure-event'
-import EzyDisconnectionEvent from './ezy-disconnection-event'
+import EzyTryConnectEvent from './ezy-try-connect-event'
 
 class EzyConnector {
     constructor() {
@@ -20,24 +19,29 @@ class EzyConnector {
 
     connect (client, url) {
         this.ws = new WebSocket(url);
+        var failed = false;
         var pingManager = client.pingManager;
         var eventMessageHandler = client.eventMessageHandler;
 
         this.ws.onerror = function (e) {
             console.log('connect to: ' + url + ' error : ' + JSON.stringify(e));
+            failed = true;
             var event = new EzyConnectionFailureEvent(
-                EzyConnectionFailedReason.CONNECTION_REFUSED);
+                EzyConnectionFailedReason.UNKNOWN);
             eventMessageHandler.handleEvent(event);
         }
 
-        this.ws.onopen = function () {
+        this.ws.onopen = function (e) {
             console.log('connected to: ' + url);
+            client.reconnectCount = 0;
             client.status = EzyConnectionStatus.CONNECTED;
             var event = new EzyConnectionSuccessEvent();
             eventMessageHandler.handleEvent(event);
         }
 
-        this.ws.onclose = function () {
+        this.ws.onclose = function (e) {
+            if(failed)
+                return;
             if(client.isConnected()) {
                 var reason = EzyDisconnectReason.UNKNOWN;
                 eventMessageHandler.handleDisconnection(reason);
@@ -67,14 +71,18 @@ class EzyConnector {
 }
 
 class EzyClient {
-    constructor() {
-        this.name = "";
+    constructor(config) {
+        this.config = config;
+        this.name = config.getClientName();
         this.url = null;
         this.connector = null;
+        this.zone = null;
+        this.me = null;
         this.status = EzyConnectionStatus.NULL;
+        this.reconnectCount = 0;
         this.disconnected = false;
+        this.reconnectTimeout = null;
         this.pingManager = new EzyPingManager();
-        this.zoneManager = new EzyZoneManager();
         this.pingSchedule = new EzyPingSchedule(this);
         this.handlerManager = new EzyHandlerManager(this);
         this.setup = new EzySetup(this.handlerManager);
@@ -85,12 +93,39 @@ class EzyClient {
     }
     
     connect(url) {
-        this.status = EzyConnectionStatus.CONNECTING;
         this.url = url ? url : this.url;
-        this.zoneManager.reset();
-        this.appsById = {};
+        this.preconnect();
+        this.reconnectCount = 0;
+        this.status = EzyConnectionStatus.CONNECTING;
         this.connector = new EzyConnector();
         this.connector.connect(this, this.url);
+    }
+
+    reconnect() {
+        var reconnectConfig = this.config.reconnect;
+        var maxReconnectCount = reconnectConfig.maxReconnectCount;
+        if(this.reconnectCount >= maxReconnectCount)
+            return false;
+        this.preconnect();
+        this.status = EzyConnectionStatus.RECONNECTING;
+        this.reconnectTimeout = setTimeout(
+            () => {
+                this.connector = new EzyConnector();
+                this.connector.connect(this, this.url);
+            }, 
+            reconnectConfig.reconnectPeriod
+        );
+        this.reconnectCount ++;
+        var event = new EzyTryConnectEvent(this.reconnectCount);
+        this.eventMessageHandler.handleEvent(event);
+    }
+
+    preconnect() {
+        this.zone = null;
+        this.me = null;
+        this.appsById = {};
+        if(this.reconnectTimeout)
+            clearTimeout(this.reconnectTimeout);
     }
 
     disconnect() {

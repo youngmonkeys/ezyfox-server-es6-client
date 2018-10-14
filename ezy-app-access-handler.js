@@ -2,9 +2,7 @@ import EzyApp from './ezy-app'
 
 class EzyAppAccessHandler {
     handle(data) {
-        var zoneId = data[0];
-        var zoneManager = this.client.zoneManager;
-        var zone = zoneManager.getZoneById(zoneId);
+        var zone = this.client.zone;
         var appManager = zone.appManager;
         var app = this.newApp(zone, data);
         appManager.addApp(app);
@@ -14,8 +12,8 @@ class EzyAppAccessHandler {
     }
 
     newApp(zone, data) {
-        var appId = data[1];
-        var appName = data[2];
+        var appId = data[0];
+        var appName = data[1];
         var app = new EzyApp(this.client, zone, appId, appName);
         return app;
     }

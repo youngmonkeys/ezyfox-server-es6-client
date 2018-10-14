@@ -6,7 +6,7 @@ class EzyApp {
         this.name = name;
         this.client = client;
         this.zone = zone;
-        this.dataHandlers = zone.getAppDataHandlers(name);
+        this.dataHandlers = client.handlerManager.getAppDataHandlers(name);
     }
 
     sendRequest(cmd, data) {

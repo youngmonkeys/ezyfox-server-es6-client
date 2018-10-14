@@ -10,13 +10,15 @@ import EzyEventType from './ezy-event-type'
 import EzyConnectionStatus from './ezy-connection-status'
 import EzyConnectionFailedReason from './ezy-connection-failed-reason'
 import EzyDisconnectReason from './ezy-disconnect-reason'
+import EzyClientConfig from './ezy-client-config'
 import EzyConnectionSuccessHandler from './ezy-connection-success-handler'
-import EzyDisconnectionEventHandler from './ezy-disconnection-handler'
+import EzyDisconnectionHandler from './ezy-disconnection-handler'
 import EzyHandshakeHandler from './ezy-handshake-handler'
-import EzyLoginHandler from './ezy-login-handler'
+import EzyLoginSuccessHandler from './ezy-login-success-handler'
 import EzyPongHandler from './ezy-pong-handler'
 import EzyAppAccessHandler from './ezy-app-access-handler'
 import EzyAppResponseHandler from './ezy-app-response-handler'
+import EzyConnectionFailureHandler from './ezy-connection-failure-handler'
 
 
 const Ezy = {
@@ -30,12 +32,14 @@ const Ezy = {
     EventType                   : EzyEventType,
     ConnectionFailedReason      : EzyConnectionFailedReason,
     ConnectionStatus            : EzyConnectionStatus,
+    ClientConfig                : EzyClientConfig,
     User                        : EzyUser,
     Zone                        : EzyZone,
-    ConnectionEventHandler      : EzyConnectionSuccessHandler,
-    DisconnectionEventHandler   : EzyDisconnectionEventHandler,
+    ConnectionSuccessHandler    : EzyConnectionSuccessHandler,
+    ConnectionFailureHandler    : EzyConnectionFailureHandler,
+    DisconnectionHandler        : EzyDisconnectionHandler,
     HandshakeHandler            : EzyHandshakeHandler,
-    LoginHandler                : EzyLoginHandler,
+    LoginSuccessHandler         : EzyLoginSuccessHandler,
     AppAccessHandler            : EzyAppAccessHandler,
     AppResponseHandler          : EzyAppResponseHandler,
     PongHandler                 : EzyPongHandler

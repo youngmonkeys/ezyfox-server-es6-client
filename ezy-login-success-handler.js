@@ -2,7 +2,7 @@ import EzyCommand from './ezy-command'
 import EzyZone from './ezy-zone'
 import EzyUser from './ezy-user'
 
-class EzyLoginHandler {
+class EzyLoginSuccessHandler {
     handle(data) {
         var zoneId = data[0];
         var zoneName = data[1];
@@ -13,10 +13,9 @@ class EzyLoginHandler {
 
         var zone = new EzyZone(this.client, zoneId, zoneName);
         var user = new EzyUser(userId, username);
-        var zoneManager = this.client.zoneManager;
-        zone.me = user;
-        zoneManager.addZone(zone);
-        this.handleResponseAppDatas(zoneId, joinedAppArray);
+        this.client.me = user;
+        this.client.zone = zone;
+        this.handleResponseAppDatas(joinedAppArray);
         this.handleResponseData(responseData);
         if(joinedAppArray.length <= 0)
             this.handleLoginSuccess(responseData);
@@ -28,11 +27,11 @@ class EzyLoginHandler {
     handleResponseData(data) {
     }
 
-    handleResponseAppDatas(zoneId, appDatas) {
+    handleResponseAppDatas(appDatas) {
         var handlerManager = this.client.handlerManager;
         var appAccessHandler = handlerManager.getDataHandler(EzyCommand.APP_ACCESS);
         appDatas.forEach(app => {
-            appAccessHandler.handle([zoneId].concat(app));
+            appAccessHandler.handle(app);
         });
     }
 
@@ -43,4 +42,4 @@ class EzyLoginHandler {
     }
 }
 
-export default EzyLoginHandler
+export default EzyLoginSuccessHandler

@@ -1,5 +1,5 @@
 class EzyPongHandler {
-    handle(context) {
+    handle(data) {
     }
 }
 

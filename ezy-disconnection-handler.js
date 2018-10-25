@@ -13,7 +13,7 @@ class EzyDisconnectionHandler {
         if(must)
             reconnecting = this.client.reconnect();
         if(!reconnecting) {
-            this.client.status = EzyConnectionStatus.FAILURE;
+            this.client.status = EzyConnectionStatus.DISCONNECTED;
             this.control(event);
         }
     }

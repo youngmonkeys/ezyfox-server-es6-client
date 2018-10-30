@@ -1,4 +1,4 @@
-class EzyGuid {
+export class EzyGuid {
     static generate() {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
@@ -9,4 +9,4 @@ class EzyGuid {
     }
 }
 
-export default EzyGuid
+export default {EzyGuid}

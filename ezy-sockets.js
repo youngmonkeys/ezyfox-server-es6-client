@@ -1,7 +1,4 @@
-import EzyEventType from './ezy-event-type'
-import EzyDisconnectReason from './ezy-disconnect-reason'
-import EzyCommand from './ezy-command'
-import EzyDisconnectionEvent from './ezy-disconnection-event'
+import Const from './ezy-constants'
 
 class EzyPingSchedule {
 
@@ -29,11 +26,11 @@ class EzyPingSchedule {
         const maxLostPingCount = this.pingManager.maxLostPingCount;
         const lostPingCount = this.pingManager.increaseLostPingCount();
         if(lostPingCount >= maxLostPingCount) {
-            var reason = EzyDisconnectReason.SERVER_NOT_RESPONDING;
+            var reason = Const.EzyDisconnectReason.SERVER_NOT_RESPONDING;
             this.eventMessageHandler.handleDisconnection(reason);
         }
         else {
-            this.client.sendRequest(EzyCommand.PING, []);
+            this.client.sendRequest(Const.EzyCommand.PING, []);
         }
     }
 
@@ -43,4 +40,4 @@ class EzyPingSchedule {
     }
 }
 
-export default EzyPingSchedule
+export default {EzyPingSchedule}

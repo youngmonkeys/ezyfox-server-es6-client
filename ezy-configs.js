@@ -20,4 +20,4 @@ class EzyReconnectConfig {
     }
 }
 
-export default EzyClientConfig
+export default {EzyClientConfig}

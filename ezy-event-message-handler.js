@@ -1,8 +1,4 @@
-import EzyCommand from './ezy-command'
-import EzyCommands from './ezy-commands'
-import EzyEventType from './ezy-event-type'
-import EzyDisconnectReasons from './ezy-disconnect-reasons'
-import EzyDisconnectionEvent from './ezy-disconnection-event'
+import Const from './ezy-constants'
 
 class EzyEventMessageHandler {
 
@@ -22,16 +18,16 @@ class EzyEventMessageHandler {
 
     handleDisconnection(reason) {
         this.client.onDisconnected(reason);
-        var event = new EzyDisconnectionEvent(reason);
+        var event = new Event.EzyDisconnectionEvent(reason);
         this.handleEvent(event);
     }
 
     handleMessage(message) {
-        var cmd = EzyCommands[message[0]];
+        var cmd = Const.EzyCommands[message[0]];
         var data = message.length > 1 ? message[1] : [];
         if(!this.unloggableCommands.includes(cmd))
             console.log('received cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
-        if(cmd === EzyCommand.DISCONNECT)
+        if(cmd === Const.EzyCommand.DISCONNECT)
             this.handleDisconnectionData(data);
         else
             this.handleResponseData(cmd, data);
@@ -39,7 +35,7 @@ class EzyEventMessageHandler {
 
     handleDisconnectionData(resonseData) {
         var reasonId = resonseData[0];
-        var reason = EzyDisconnectReasons[reasonId];
+        var reason = Const.EzyDisconnectReasons[reasonId];
         this.handleDisconnection(reason);
     }
 

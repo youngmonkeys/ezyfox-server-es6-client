@@ -73,18 +73,18 @@ export const EzyDisconnectReason = {
     CONNECTION_REFUSE : {id : 401, name : "CONNECTION_REFUSE"}
 }
 
-var EzyDisconnectReasons = EzyDisconnectReasons || {};
+export var EzyDisconnectReasons = EzyDisconnectReasons || {};
 EzyDisconnectReasons[EzyDisconnectReason.UNKNOWN.id] = EzyDisconnectReason.UNKNOWN;
-EzyDisconnectReasons[EzyDisconnectReason.IDLE] = EzyDisconnectReason.IDLE;
-EzyDisconnectReasons[EzyDisconnectReason.NOT_LOGGED_IN] = EzyDisconnectReason.NOT_LOGGED_IN;
-EzyDisconnectReasons[EzyDisconnectReason.ANOTHER_SESSION_LOGIN] = EzyDisconnectReason.ANOTHER_SESSION_LOGIN;
-EzyDisconnectReasons[EzyDisconnectReason.ADMIN_BAN] = EzyDisconnectReason.ADMIN_BAN;
-EzyDisconnectReasons[EzyDisconnectReason.ADMIN_KICK] = EzyDisconnectReason.ADMIN_KICK;
-EzyDisconnectReasons[EzyDisconnectReason.MAX_REQUEST_PER_SECOND] = EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
-EzyDisconnectReasons[EzyDisconnectReason.MAX_REQUEST_SIZE] = EzyDisconnectReason.MAX_REQUEST_SIZE;
-EzyDisconnectReasons[EzyDisconnectReason.SERVER_ERROR] = EzyDisconnectReason.SERVER_ERROR;
-EzyDisconnectReasons[EzyDisconnectReason.SERVER_NOT_RESPONDING] = EzyDisconnectReason.SERVER_NOT_RESPONSE;
-EzyDisconnectReasons[EzyDisconnectReason.CONNECTION_REFUSE] = EzyDisconnectReason.CONNECTION_REFUSE;
+EzyDisconnectReasons[EzyDisconnectReason.IDLE.id] = EzyDisconnectReason.IDLE;
+EzyDisconnectReasons[EzyDisconnectReason.NOT_LOGGED_IN.id] = EzyDisconnectReason.NOT_LOGGED_IN;
+EzyDisconnectReasons[EzyDisconnectReason.ANOTHER_SESSION_LOGIN.id] = EzyDisconnectReason.ANOTHER_SESSION_LOGIN;
+EzyDisconnectReasons[EzyDisconnectReason.ADMIN_BAN.id] = EzyDisconnectReason.ADMIN_BAN;
+EzyDisconnectReasons[EzyDisconnectReason.ADMIN_KICK.id] = EzyDisconnectReason.ADMIN_KICK;
+EzyDisconnectReasons[EzyDisconnectReason.MAX_REQUEST_PER_SECOND.id] = EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
+EzyDisconnectReasons[EzyDisconnectReason.MAX_REQUEST_SIZE.id] = EzyDisconnectReason.MAX_REQUEST_SIZE;
+EzyDisconnectReasons[EzyDisconnectReason.SERVER_ERROR.id] = EzyDisconnectReason.SERVER_ERROR;
+EzyDisconnectReasons[EzyDisconnectReason.SERVER_NOT_RESPONDING.id] = EzyDisconnectReason.SERVER_NOT_RESPONSE;
+EzyDisconnectReasons[EzyDisconnectReason.CONNECTION_REFUSE.id] = EzyDisconnectReason.CONNECTION_REFUSE;
 
 Object.freeze(EzyDisconnectReasons);
 

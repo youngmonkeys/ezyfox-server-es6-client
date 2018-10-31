@@ -1,4 +1,5 @@
 import Const from './ezy-constants'
+import Event from './ezy-events'
 
 class EzyEventMessageHandler {
 

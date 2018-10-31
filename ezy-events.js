@@ -14,7 +14,7 @@ export class EzyTryConnectEvent {
     }
 
     getType() {
-        return Const.EzyEvenType.TRY_CONNECT;
+        return Const.EzyEventType.TRY_CONNECT;
     }
 }
 
@@ -36,7 +36,7 @@ export class EzyLostPingEvent {
     }
 
     getType() {
-        Const.EzyEvenType.LOST_PING;
+        return Const.EzyEventType.LOST_PING;
     }
 }
 

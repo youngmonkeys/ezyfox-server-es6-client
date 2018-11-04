@@ -60,33 +60,40 @@ export const EzyConnectionFailedReason =  {
 }
 
 export const EzyDisconnectReason = {
-    UNKNOWN : {id : 0, name : "UNKNOWN"},
-    IDLE : {id : 1, name : "IDLE"},
-    NOT_LOGGED_IN : {id : 2, name : "NOT_LOGGED_IN"},
-    ANOTHER_SESSION_LOGIN : {id : 3, name : "ANOTHER_SESSION_LOGIN"},
-    ADMIN_BAN : {id : 4, name : "ADMIN_BAN"},
-    ADMIN_KICK : {id : 5, name : "ADMIN_KICK"},
-    MAX_REQUEST_PER_SECOND : {id : 6, name : "MAX_REQUEST_PER_SECOND"},
-    MAX_REQUEST_SIZE : {id : 7, name : "MAX_REQUEST_SIZE"},
-    SERVER_ERROR : {id : 8, name : "SERVER_ERROR"},
-    SERVER_NOT_RESPONDING : {id : 400, name : "SERVER_NOT_RESPONSE"},
-    CONNECTION_REFUSE : {id : 401, name : "CONNECTION_REFUSE"}
+    UNKNOWN : 0,
+    IDLE : 1,
+    NOT_LOGGED_IN : 2,
+    ANOTHER_SESSION_LOGIN : 3,
+    ADMIN_BAN : 4,
+    ADMIN_KICK : 5,
+    MAX_REQUEST_PER_SECOND : 6,
+    MAX_REQUEST_SIZE : 7,
+    SERVER_ERROR : 8,
+    SERVER_NOT_RESPONDING : 400,
+    CONNECTION_REFUSE : 401
 }
 
-export var EzyDisconnectReasons = EzyDisconnectReasons || {};
-EzyDisconnectReasons[EzyDisconnectReason.UNKNOWN.id] = EzyDisconnectReason.UNKNOWN;
-EzyDisconnectReasons[EzyDisconnectReason.IDLE.id] = EzyDisconnectReason.IDLE;
-EzyDisconnectReasons[EzyDisconnectReason.NOT_LOGGED_IN.id] = EzyDisconnectReason.NOT_LOGGED_IN;
-EzyDisconnectReasons[EzyDisconnectReason.ANOTHER_SESSION_LOGIN.id] = EzyDisconnectReason.ANOTHER_SESSION_LOGIN;
-EzyDisconnectReasons[EzyDisconnectReason.ADMIN_BAN.id] = EzyDisconnectReason.ADMIN_BAN;
-EzyDisconnectReasons[EzyDisconnectReason.ADMIN_KICK.id] = EzyDisconnectReason.ADMIN_KICK;
-EzyDisconnectReasons[EzyDisconnectReason.MAX_REQUEST_PER_SECOND.id] = EzyDisconnectReason.MAX_REQUEST_PER_SECOND;
-EzyDisconnectReasons[EzyDisconnectReason.MAX_REQUEST_SIZE.id] = EzyDisconnectReason.MAX_REQUEST_SIZE;
-EzyDisconnectReasons[EzyDisconnectReason.SERVER_ERROR.id] = EzyDisconnectReason.SERVER_ERROR;
-EzyDisconnectReasons[EzyDisconnectReason.SERVER_NOT_RESPONDING.id] = EzyDisconnectReason.SERVER_NOT_RESPONSE;
-EzyDisconnectReasons[EzyDisconnectReason.CONNECTION_REFUSE.id] = EzyDisconnectReason.CONNECTION_REFUSE;
+export var EzyDisconnectReasonNames = EzyDisconnectReasonNames || {};
+EzyDisconnectReasonNames[EzyDisconnectReason.UNKNOWN] = "UNKNOWN";
+EzyDisconnectReasonNames[EzyDisconnectReason.IDLE] = "IDLE";
+EzyDisconnectReasonNames[EzyDisconnectReason.NOT_LOGGED_IN] = "NOT_LOGGED_IN";
+EzyDisconnectReasonNames[EzyDisconnectReason.ANOTHER_SESSION_LOGIN] = "ANOTHER_SESSION_LOGIN";
+EzyDisconnectReasonNames[EzyDisconnectReason.ADMIN_BAN] = "ADMIN_BAN";
+EzyDisconnectReasonNames[EzyDisconnectReason.ADMIN_KICK] = "ADMIN_KICK";
+EzyDisconnectReasonNames[EzyDisconnectReason.MAX_REQUEST_PER_SECOND] = "MAX_REQUEST_PER_SECOND";
+EzyDisconnectReasonNames[EzyDisconnectReason.MAX_REQUEST_SIZE] = "MAX_REQUEST_SIZE";
+EzyDisconnectReasonNames[EzyDisconnectReason.SERVER_ERROR] = "SERVER_ERROR";
+EzyDisconnectReasonNames[EzyDisconnectReason.SERVER_NOT_RESPONDING] = "SERVER_NOT_RESPONSE";
+EzyDisconnectReasonNames[EzyDisconnectReason.CONNECTION_REFUSE] = "CONNECTION_REFUSE";
 
-Object.freeze(EzyDisconnectReasons);
+EzyDisconnectReasonNames.parse = function(reasonId) {
+    const answer = EzyDisconnectReasonNames[reasonId];
+    if(answer)
+        return answer;
+    return reasonId.toString();
+}
+
+Object.freeze(EzyDisconnectReasonNames);
 
 export default {
     EzyCommand, 
@@ -95,5 +102,5 @@ export default {
     EzyConnectionStatus, 
     EzyConnectionFailedReason,
     EzyDisconnectReason,
-    EzyDisconnectReasons
+    EzyDisconnectReasonNames
 }

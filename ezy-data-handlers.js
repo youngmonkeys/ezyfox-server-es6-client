@@ -105,7 +105,7 @@ export class EzyAppAccessHandler {
 //======================================
 
 class EzyPongHandler {
-    handle(context) {
+    handle(client) {
     }
 }
 

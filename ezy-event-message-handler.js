@@ -35,8 +35,7 @@ class EzyEventMessageHandler {
     }
 
     handleDisconnectionData(resonseData) {
-        var reasonId = resonseData[0];
-        var reason = Const.EzyDisconnectReasons[reasonId];
+        var reason = resonseData[0];
         this.handleDisconnection(reason);
     }
 

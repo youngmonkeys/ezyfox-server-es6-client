@@ -15,6 +15,7 @@ const Ezy = {
     Command                     : Const.EzyCommand,
     Commands                    : Const.EzyCommands,
     DisconnectReason            : Const.EzyDisconnectReason,
+    DisconnectReasonNames       : Const.EzyDisconnectReasonNames,
     ConnectionFailedReason      : Const.EzyConnectionFailedReason,
     ConnectionStatus            : Const.EzyConnectionStatus,
     EventType                   : Const.EzyEventType,

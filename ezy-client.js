@@ -8,10 +8,12 @@ import EzyEventMessageHandler from './ezy-event-message-handler'
 class EzyConnector {
     constructor() {
         this.ws = null;
+        this.destroyed = false;
     }
 
     connect (client, url) {
         this.ws = new WebSocket(url);
+        var thiz = this;
         var failed = false;
         var pingManager = client.pingManager;
         var eventMessageHandler = client.eventMessageHandler;
@@ -35,6 +37,8 @@ class EzyConnector {
         this.ws.onclose = function (e) {
             if(failed)
                 return;
+            if(thiz.destroyed)
+                return;
             if(client.isConnected()) {
                 var reason = Const.EzyDisconnectReason.UNKNOWN;
                 eventMessageHandler.handleDisconnection(reason);
@@ -45,6 +49,8 @@ class EzyConnector {
         }
 
         this.ws.onmessage = function (event) {
+            if(thiz.destroyed) 
+                return;
             pingManager.lostPingCount = 0;
             var data = event.data;
             var message = JSON.parse(data);
@@ -55,6 +61,11 @@ class EzyConnector {
     disconnect() {
         if(this.ws)
             this.ws.close();
+    }
+
+    destroy() {
+        this.destroyed = true;
+        this.disconnect();
     }
 
     send(data) {
@@ -117,6 +128,8 @@ class EzyClient {
         this.zone = null;
         this.me = null;
         this.appsById = {};
+        if(this.connector)
+            this.connector.destroy();
         if(this.reconnectTimeout)
             clearTimeout(this.reconnectTimeout);
     }

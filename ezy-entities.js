@@ -20,7 +20,10 @@ export class EzyApp {
     }
 
     sendRequest(cmd, data) {
-        var requestData = [this.id, [cmd, data]];
+        var validData = data;
+        if(!validData)
+            validData = {};
+        var requestData = [this.id, [cmd, validData]];
         this.client.sendRequest(Const.EzyCommand.APP_REQUEST, requestData);
     }
 

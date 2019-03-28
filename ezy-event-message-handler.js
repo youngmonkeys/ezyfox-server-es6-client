@@ -1,4 +1,5 @@
 import Const from './ezy-constants'
+import Util from './ezy-util'
 import Event from './ezy-events'
 
 class EzyEventMessageHandler {
@@ -14,7 +15,7 @@ class EzyEventMessageHandler {
         if(eventHandler)
             eventHandler.handle(event);
         else
-            console.log('has no handler with event: ' + event.getType());
+            Util.EzyLogger.console('has no handler with event: ' + event.getType());
     }
 
     handleDisconnection(reason) {
@@ -27,7 +28,7 @@ class EzyEventMessageHandler {
         var cmd = Const.EzyCommands[message[0]];
         var data = message.length > 1 ? message[1] : [];
         if(!this.unloggableCommands.includes(cmd))
-            console.log('received cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
+            Util.EzyLogger.console('received cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
         if(cmd === Const.EzyCommand.DISCONNECT)
             this.handleDisconnectionData(data);
         else
@@ -44,7 +45,7 @@ class EzyEventMessageHandler {
         if(handler)
             handler.handle(responseData);
         else
-            console.log("has no handler with command: " + cmd.name);
+            Util.EzyLogger.console("has no handler with command: " + cmd.name);
     }
 }
 

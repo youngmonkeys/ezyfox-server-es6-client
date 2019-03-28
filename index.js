@@ -9,6 +9,7 @@ import EzyClients from './ezy-clients'
 
 const Ezy = {
     Guid                        : Util.EzyGuid,
+    Logger                      : Util.EzyLogger,
     App                         : Entity.EzyApp,
     User                        : Entity.EzyUser,
     Zone                        : Entity.EzyZone,

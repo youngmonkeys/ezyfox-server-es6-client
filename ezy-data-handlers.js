@@ -1,5 +1,5 @@
 import Const from './ezy-constants'
-import Const from './ezy-util'
+import Util from './ezy-util'
 import Entity from './ezy-entities'
 
 export class EzyHandshakeHandler {

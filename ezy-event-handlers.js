@@ -54,7 +54,7 @@ export class EzyConnectionSuccessHandler {
 export class EzyConnectionFailureHandler {
 
     handle(event) {
-        console.log("connection failure, reason = " + event.reason);
+        Util.EzyLogger.console("connection failure, reason = " + event.reason);
         var config = this.client.config;
         var reconnectConfig = config.reconnect;
         var should = this.shouldReconnect(event);
@@ -81,7 +81,7 @@ export class EzyConnectionFailureHandler {
 
 export class EzyDisconnectionHandler {
     handle(event) {
-        console.log("handle disconnection, reason = " + event.reason);
+        Util.EzyLogger.console("handle disconnection, reason = " + event.reason);
         this.preHandle(event);
         var config = this.client.config;
         var reconnectConfig = config.reconnect;

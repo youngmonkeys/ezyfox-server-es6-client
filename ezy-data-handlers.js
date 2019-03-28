@@ -52,7 +52,7 @@ export class EzyLoginSuccessHandler {
         else {
             this.handleLoginSuccess(responseData);
         }            
-        console.log("user: " + user.name + " logged in successfully");
+        Util.EzyLogger.console("user: " + user.name + " logged in successfully");
     }
 
     allowReconnection() {
@@ -88,7 +88,7 @@ export class EzyAppAccessHandler {
         appManager.addApp(app);
         this.client.addApp(app);
         this.postHandle(app, data);
-        console.log("access app: " + app.name + " successfully");
+        Util.EzyLogger.console("access app: " + app.name + " successfully");
     }
 
     newApp(zone, data) {
@@ -123,7 +123,7 @@ export class EzyAppResponseHandler {
         if(handler)
             handler(app, commandData);
         else
-            console.log("app: " + app.name + " has no handler for command: " + cmd);
+            Util.EzyLogger.console("app: " + app.name + " has no handler for command: " + cmd);
     }
 }
 

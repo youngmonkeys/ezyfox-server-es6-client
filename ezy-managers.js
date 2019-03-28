@@ -16,7 +16,7 @@ export class EzyAppManager {
         if(this.appList.length > 0)
            app = this.appList[0];
         else
-            console.log('has no app in zone: ' + this.zoneName);
+            Util.EzyLogger.console('has no app in zone: ' + this.zoneName);
         return app;
     }
 

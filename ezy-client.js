@@ -1,4 +1,5 @@
 import Const from './ezy-constants'
+import Util from './ezy-util'
 import Event from './ezy-events'
 import Manager from './ezy-managers'
 import Socket from './ezy-sockets'
@@ -19,7 +20,7 @@ class EzyConnector {
         var eventMessageHandler = client.eventMessageHandler;
 
         this.ws.onerror = function (e) {
-            console.log('connect to: ' + url + ' error : ' + JSON.stringify(e));
+            Util.EzyLogger.console('connect to: ' + url + ' error : ' + JSON.stringify(e));
             failed = true;
             var event = new Event.EzyConnectionFailureEvent(
                 Const.EzyConnectionFailedReason.UNKNOWN);
@@ -27,7 +28,7 @@ class EzyConnector {
         }
 
         this.ws.onopen = function (e) {
-            console.log('connected to: ' + url);
+            Util.EzyLogger.console('connected to: ' + url);
             client.reconnectCount = 0;
             client.status = Const.EzyConnectionStatus.CONNECTED;
             var event = new Event.EzyConnectionSuccessEvent();
@@ -44,7 +45,7 @@ class EzyConnector {
                 eventMessageHandler.handleDisconnection(reason);
             }
             else {
-                console.log('connection to: ' + url + " has disconnected before");
+                Util.EzyLogger.console('connection to: ' + url + " has disconnected before");
             }
         }
 
@@ -145,7 +146,7 @@ class EzyClient {
 
     sendRequest(cmd, data) {
         if(!this.unloggableCommands.includes(cmd)) {
-            console.log('send cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
+            Util.EzyLogger.console('send cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
         }
         var request = [cmd.id, data];
         this.send(request);
@@ -153,7 +154,7 @@ class EzyClient {
 
     onDisconnected(reason) {
         const reasonName = Const.EzyDisconnectReasonNames.parse(reason);
-        console.log('disconnect with: ' + this.url + ", reason: " + reasonName);
+        Util.EzyLogger.console('disconnect with: ' + this.url + ", reason: " + reasonName);
         this.status = Const.EzyConnectionStatus.DISCONNECTED;
         this.pingSchedule.stop();
         this.disconnect();

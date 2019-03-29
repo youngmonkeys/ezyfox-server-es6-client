@@ -10,10 +10,12 @@ export class EzyGuid {
 }
 
 export class EzyLogger {
-    static debug = true;
+    static debug() {
+        return true;
+    }
 
     static console(message) {
-        if(EzyLogger.debug)
+        if(EzyLogger.debug())
             console.log(message);
     }
 }

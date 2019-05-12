@@ -46,7 +46,7 @@ export class EzyLoginSuccessHandler {
         Util.EzyLogger.console("user: " + user.name + " logged in successfully");
     }
 
-    this.handleLoginSuccess = function(joinedApps, responseData) {
+    handleLoginSuccess(joinedApps, responseData) {
     }
 }
 

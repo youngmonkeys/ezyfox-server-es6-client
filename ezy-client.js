@@ -91,7 +91,6 @@ class EzyClient {
         this.pingSchedule = new Socket.EzyPingSchedule(this);
         this.handlerManager = new Manager.EzyHandlerManager(this);
         this.setup = new EzySetup(this.handlerManager);
-        this.appsById = {};
         this.unloggableCommands = [Const.EzyCommand.PING, Const.EzyCommand.PONG];
         this.eventMessageHandler = new EzyEventMessageHandler(this);
         this.pingSchedule.eventMessageHandler = this.eventMessageHandler;
@@ -165,14 +164,17 @@ class EzyClient {
         return connected;
     }
 
-    addApp(app) {
-        this.appsById[app.id] = app;
-    }
-
     getAppById(appId) {
-        return this.appsById[appId];
+        if(!this.zone) return null;
+        var appManager = this.zone.appManager;
+        return appManager.getAppById(appId);
     }
 
+    getPluginById(pluginId) {
+        if(!this.zone) return null;
+        var pluginManager = this.zone.pluginManager;
+        return pluginManager.getPluginById(pluginId);
+    }
 }
 
 export default EzyClient

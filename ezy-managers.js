@@ -40,6 +40,43 @@ export class EzyAppManager {
 
 //======================================
 
+export class EzyPluginManager {
+
+    constructor(zoneName) {
+        this.zoneName = zoneName;
+        this.pluginList = [];
+        this.pluginsById = {};
+        this.pluginsByName = {};
+    }
+
+    getPlugin() {
+        var plugin = null;
+        if(this.pluginList.length > 0)
+           plugin = this.pluginList[0];
+        else
+            Util.EzyLogger.console('has no plugin in zone: ' + this.zoneName);
+        return plugin;
+    }
+
+    addPlugin(plugin) {
+        this.pluginList.push(plugin);
+        this.pluginsById[plugin.id] = plugin;
+        this.pluginsByName[plugin.name] = plugin;
+    }
+
+    getPluginById(id) {
+        var plugin = this.pluginsById[id];
+        return plugin;
+    }
+
+    getPluginByName(name) {
+        var plugin = this.pluginsByName[name];
+        return plugin;
+    }
+}
+
+//======================================
+
 export class EzyPingManager {
     constructor() {
         this.pingPeriod = 5000;
@@ -61,6 +98,7 @@ export class EzyHandlerManager {
         this.dataHandlers = this.newDataHandlers();
         this.eventHandlers = this.newEventHandlers();
         this.appDataHandlerss = {};
+        this.pluginDataHandlerss = {};
     }
 
     newEventHandlers() {
@@ -78,6 +116,8 @@ export class EzyHandlerManager {
         handlers.addHandler(Const.EzyCommand.LOGIN, new DataHandler.EzyLoginSuccessHandler());
         handlers.addHandler(Const.EzyCommand.APP_ACCESS, new DataHandler.EzyAppAccessHandler());
         handlers.addHandler(Const.EzyCommand.APP_REQUEST, new DataHandler.EzyAppResponseHandler());
+        handlers.addHandler(Const.EzyCommand.PLUGIN_INFO, new DataHandler.EzyPluginInfoHandler());
+        handlers.addHandler(Const.EzyCommand.PLUGIN_REQUEST, new DataHandler.EzyPluginResponseHandler());
         return handlers;
     }
 
@@ -100,6 +140,15 @@ export class EzyHandlerManager {
         return answer;
     }
 
+    getPluginDataHandlers(pluginName) {
+        var answer = this.pluginDataHandlerss[pluginName];
+        if(!answer) {
+            answer = new DataHandler.EzyPluginDataHandlers();
+            this.pluginDataHandlerss[pluginName] = answer;
+        }
+        return answer;
+    }
+
     addDataHandler(cmd, dataHandler) {
        this.dataHandlers.addHandler(cmd, dataHandler);
     }
@@ -109,4 +158,4 @@ export class EzyHandlerManager {
     }
 }
 
-export default {EzyAppManager, EzyPingManager, EzyHandlerManager}
+export default {EzyAppManager, EzyPluginManager, EzyPingManager, EzyHandlerManager}

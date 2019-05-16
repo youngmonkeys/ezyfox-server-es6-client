@@ -12,8 +12,7 @@ export const EzyCommand =  {
     APP_EXIT : {id: 33, name: "APP_EXIT"},
     APP_ACCESS_ERROR : {id: 34, name: "APP_ACCESS_ERROR"},
     PLUGIN_INFO : {id: 40, name: "PLUGIN_INFO"},
-    PLUGIN_REQUEST_BY_NAME : {id: 41, name: "PLUGIN_REQUEST_BY_NAME"},
-    PLUGIN_REQUEST_BY_ID : {id: 42, name: "PLUGIN_REQUEST_BY_ID"}
+    PLUGIN_REQUEST : {id: 41, name: "PLUGIN_REQUEST"},
 }
 
 export var EzyCommands = EzyCommands || {};
@@ -30,8 +29,7 @@ EzyCommands[EzyCommand.APP_REQUEST.id] = EzyCommand.APP_REQUEST;
 EzyCommands[EzyCommand.APP_EXIT.id] = EzyCommand.APP_EXIT;
 EzyCommands[EzyCommand.APP_ACCESS_ERROR.id] = EzyCommand.APP_ACCESS_ERROR;
 EzyCommands[EzyCommand.PLUGIN_INFO.id] = EzyCommand.PLUGIN_INFO;
-EzyCommands[EzyCommand.PLUGIN_REQUEST_BY_NAME.id] = EzyCommand.PLUGIN_REQUEST_BY_NAME;
-EzyCommands[EzyCommand.PLUGIN_REQUEST_BY_ID.id] = EzyCommand.PLUGIN_REQUEST_BY_ID;
+EzyCommands[EzyCommand.PLUGIN_REQUEST.id] = EzyCommand.PLUGIN_REQUEST;
 
 Object.freeze(EzyCommands);
 

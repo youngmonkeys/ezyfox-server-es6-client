@@ -58,7 +58,6 @@ export class EzyAppAccessHandler {
         var appManager = zone.appManager;
         var app = this.newApp(zone, data);
         appManager.addApp(app);
-        this.client.addApp(app);
         this.postHandle(app, data);
         Util.EzyLogger.console("access app: " + app.name + " successfully");
     }
@@ -71,6 +70,29 @@ export class EzyAppAccessHandler {
     }
 
     postHandle(app, data) {
+    }
+}
+
+//======================================
+
+export class EzyPluginInfoHandler {
+    handle(data) {
+        var zone = this.client.zone;
+        var pluginManager = zone.pluginManager;
+        var plugin = this.newPlugin(zone, data);
+        pluginManager.addPlugin(plugin);
+        this.postHandle(plugin, data);
+        Util.EzyLogger.console("request plugin: " + plugin.name + " info successfully");
+    }
+
+    newPlugin(zone, data) {
+        var pluginId = data[0];
+        var pluginName = data[1];
+        var plugin = new Entity.EzyPlugin(this.client, zone, pluginId, pluginName);
+        return plugin;
+    }
+
+    postHandle(plugin, data) {
     }
 }
 
@@ -89,13 +111,31 @@ export class EzyAppResponseHandler {
         var responseData = data[1];
         var cmd = responseData[0];
         var commandData = responseData[1];
-
+        
         var app = this.client.getAppById(appId);
         var handler = app.getDataHandler(cmd);
         if(handler)
             handler(app, commandData);
         else
             Util.EzyLogger.console("app: " + app.name + " has no handler for command: " + cmd);
+    }
+}
+
+//======================================
+
+export class EzyPluginResponseHandler {
+    handle(data) {
+        var pluginId = data[0];
+        var responseData = data[1];
+        var cmd = responseData[0];
+        var commandData = responseData[1];
+
+        var plugin = this.client.getPluginById(pluginId);
+        var handler = plugin.getDataHandler(cmd);
+        if(handler)
+            handler(plugin, commandData);
+        else
+            Util.EzyLogger.console("plugin: " + plugin.name + " has no handler for command: " + cmd);
     }
 }
 
@@ -139,12 +179,36 @@ export class EzyAppDataHandlers {
 
 }
 
+//======================================
+
+export class EzyPluginDataHandlers {
+
+    constructor() {
+        this.handlers = {}
+    }
+
+    addHandler(cmd, handler) {
+        this.handlers[cmd] = handler;
+    }
+
+    getHandler(cmd) {
+        var handler = this.handlers[cmd];
+        return handler;
+    }
+
+}
+
+//======================================
+
 export default {
     EzyHandshakeHandler,
     EzyLoginSuccessHandler,
     EzyAppAccessHandler,
+    EzyPluginInfoHandler,
     EzyPongHandler,
     EzyAppResponseHandler,
+    EzyPluginResponseHandler,
     EzyAppDataHandlers,
+    EzyPluginDataHandlers,
     EzyDataHandlers
 }

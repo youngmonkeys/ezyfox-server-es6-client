@@ -28,6 +28,8 @@ const Ezy = {
     LoginSuccessHandler         : DataHandler.EzyLoginSuccessHandler,
     AppAccessHandler            : DataHandler.EzyAppAccessHandler,
     AppResponseHandler          : DataHandler.EzyAppResponseHandler,
+    PluginInfoHandler           : DataHandler.EzyPluginInfoHandler,
+    PluginResponseHandler       : DataHandler.EzyPluginResponseHandler,
     PongHandler                 : DataHandler.EzyPongHandler,
     Client                      : EzyClient,
     Clients                     : EzyClients

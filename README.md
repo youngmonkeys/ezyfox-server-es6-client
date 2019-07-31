@@ -50,3 +50,9 @@ setupApp.addDataHandler("6", function(app, data) {
 ```javascript
 client.connect("ws://localhost:2208/ws");
 ```
+
+# Installation
+
+```
+npm i ezyfox-es6-client
+```

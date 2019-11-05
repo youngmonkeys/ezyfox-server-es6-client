@@ -34,6 +34,7 @@ export class EzyAppManager {
             delete this.appsByName[app.name];
             this.appList = this.appList.filter(app => app.id != appId);
         }
+        return app;
     }
 
     getAppById(id) {

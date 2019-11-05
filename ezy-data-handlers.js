@@ -45,7 +45,8 @@ export class EzyLoginSuccessHandler {
         Util.EzyLogger.console("user: " + user.name + " logged in successfully");
     }
 
-    handleLoginSuccess(responseData) {}
+    handleLoginSuccess(responseData) {
+    }
 }
 
 //======================================
@@ -75,7 +76,7 @@ export class EzyAppAccessHandler {
 
 export class EzyAppExitHandler {
     handle(data) {
-        var zone = client.zone;
+        var zone = this.client.zone;
         var appManager = zone.appManager
         var appId = data[0];
         var reasonId = data[1];

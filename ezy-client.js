@@ -152,8 +152,6 @@ class EzyClient {
     }
 
     onDisconnected(reason) {
-        const reasonName = Const.EzyDisconnectReasonNames.parse(reason);
-        Util.EzyLogger.console('disconnect with: ' + this.url + ", reason: " + reasonName);
         this.status = Const.EzyConnectionStatus.DISCONNECTED;
         this.pingSchedule.stop();
         this.disconnect();

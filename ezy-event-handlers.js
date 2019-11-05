@@ -60,10 +60,10 @@ export class EzyConnectionFailureHandler {
         var should = this.shouldReconnect(event);
         var must = reconnectConfig.enable && should;
         var reconnecting = false;
+        this.client.status = Const.EzyConnectionStatus.FAILURE;
         if(must)
             reconnecting = this.client.reconnect();
         if(!reconnecting) {
-            this.client.status = Const.EzyConnectionStatus.FAILURE;
             this.control(event);
         }
     }
@@ -81,17 +81,18 @@ export class EzyConnectionFailureHandler {
 
 export class EzyDisconnectionHandler {
     handle(event) {
-        Util.EzyLogger.console("handle disconnection, reason = " + event.reason);
+        const reasonName = Const.EzyDisconnectReasonNames.parse(event.reason);
+        Util.EzyLogger.console("handle disconnection, reason = " + reasonName);
         this.preHandle(event);
         var config = this.client.config;
         var reconnectConfig = config.reconnect;
         var should = this.shouldReconnect(event);
         var must = reconnectConfig.enable && should;
         var reconnecting = false;
+        this.client.status = Const.EzyConnectionStatus.DISCONNECTED;
         if(must)
             reconnecting = this.client.reconnect();
         if(!reconnecting) {
-            this.client.status = Const.EzyConnectionStatus.DISCONNECTED;
             this.control(event);
         }
     }
@@ -100,6 +101,9 @@ export class EzyDisconnectionHandler {
     }
 
     shouldReconnect(event) {
+        var reason = event.reason;
+        if(reason == Const.EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
+            return false;
         return true;
     }
 

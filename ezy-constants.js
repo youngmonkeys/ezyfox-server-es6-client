@@ -11,6 +11,7 @@ export const EzyCommand =  {
     APP_REQUEST : {id: 31, name: "APP_REQUEST"},
     APP_EXIT : {id: 33, name: "APP_EXIT"},
     APP_ACCESS_ERROR : {id: 34, name: "APP_ACCESS_ERROR"},
+    APP_REQUEST_ERROR: {id: 35, name: "APP_REQUEST_ERROR"},
     PLUGIN_INFO : {id: 40, name: "PLUGIN_INFO"},
     PLUGIN_REQUEST : {id: 41, name: "PLUGIN_REQUEST"},
 }
@@ -28,6 +29,7 @@ EzyCommands[EzyCommand.APP_ACCESS.id]  = EzyCommand.APP_ACCESS;
 EzyCommands[EzyCommand.APP_REQUEST.id] = EzyCommand.APP_REQUEST;
 EzyCommands[EzyCommand.APP_EXIT.id] = EzyCommand.APP_EXIT;
 EzyCommands[EzyCommand.APP_ACCESS_ERROR.id] = EzyCommand.APP_ACCESS_ERROR;
+EzyCommands[EzyCommand.APP_REQUEST_ERROR.id] = EzyCommand.APP_REQUEST_ERROR;
 EzyCommands[EzyCommand.PLUGIN_INFO.id] = EzyCommand.PLUGIN_INFO;
 EzyCommands[EzyCommand.PLUGIN_REQUEST.id] = EzyCommand.PLUGIN_REQUEST;
 

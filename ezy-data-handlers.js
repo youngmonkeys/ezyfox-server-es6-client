@@ -35,19 +35,17 @@ export class EzyLoginSuccessHandler {
         var zoneName = data[1];
         var userId = data[2];
         var username = data[3];
-        var joinedAppArray = data[4];
-        var responseData = data[5];
+        var responseData = data[4];
 
         var zone = new Entity.EzyZone(this.client, zoneId, zoneName);
         var user = new Entity.EzyUser(userId, username);
         this.client.me = user;
         this.client.zone = zone;
-        this.handleLoginSuccess(joinedAppArray, responseData);   
+        this.handleLoginSuccess(responseData);   
         Util.EzyLogger.console("user: " + user.name + " logged in successfully");
     }
 
-    handleLoginSuccess(joinedApps, responseData) {
-    }
+    handleLoginSuccess(responseData) {}
 }
 
 //======================================
@@ -71,6 +69,24 @@ export class EzyAppAccessHandler {
 
     postHandle(app, data) {
     }
+}
+
+//======================================
+
+export class EzyAppExitHandler {
+    handle(data) {
+        var zone = client.zone;
+        var appManager = zone.appManager
+        var appId = data[0];
+        var reasonId = data[1];
+        var app = appManager.removeApp(appId);
+        Util.EzyLogger.console("user exit app: " + app.name + ", reason: " + reasonId);
+        this.postHandle(app, data);
+    }
+
+    postHandle(app, data) {
+    }
+
 }
 
 //======================================
@@ -204,6 +220,7 @@ export default {
     EzyHandshakeHandler,
     EzyLoginSuccessHandler,
     EzyAppAccessHandler,
+    EzyAppExitHandler,
     EzyPluginInfoHandler,
     EzyPongHandler,
     EzyAppResponseHandler,

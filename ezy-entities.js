@@ -1,12 +1,16 @@
 import Const from './ezy-constants'
 import Manager from './ezy-managers'
 
+//===================================================
+
 export class EzyUser {
     constructor(id, name) {
         this.id = id;
         this.name = name;
     }
 }
+
+//===================================================
 
 export class EzyZone {
     constructor(client, id, name) {
@@ -17,6 +21,8 @@ export class EzyZone {
         this.pluginManager = new Manager.EzyPluginManager(name);
     }
 }
+
+//===================================================
 
 export class EzyApp {
     constructor(client, zone, id, name) {
@@ -41,6 +47,8 @@ export class EzyApp {
     }
 }
 
+//===================================================
+
 export class EzyPlugin {
     constructor(client, zone, id, name) {
         this.id = id;
@@ -63,5 +71,7 @@ export class EzyPlugin {
         return handler;
     }
 }
+
+//===================================================
 
 export default {EzyUser, EzyZone, EzyApp, EzyPlugin}

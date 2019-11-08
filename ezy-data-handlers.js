@@ -81,8 +81,10 @@ export class EzyAppExitHandler {
         var appId = data[0];
         var reasonId = data[1];
         var app = appManager.removeApp(appId);
-        Util.EzyLogger.console("user exit app: " + app.name + ", reason: " + reasonId);
-        this.postHandle(app, data);
+        if(app) {
+            this.postHandle(app, data);
+            Util.EzyLogger.console("user exit app: " + app.name + ", reason: " + reasonId);
+        }
     }
 
     postHandle(app, data) {

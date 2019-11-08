@@ -32,7 +32,7 @@ export class EzyAppManager {
         if(app) {
             delete this.appsById[appId];
             delete this.appsByName[app.name];
-            this.appList = this.appList.filter(app => app.id != appId);
+            this.appList = this.appList.filter(item => item.id != appId);
         }
         return app;
     }
@@ -125,8 +125,8 @@ export class EzyHandlerManager {
         handlers.addHandler(Const.EzyCommand.HANDSHAKE, new DataHandler.EzyHandshakeHandler());
         handlers.addHandler(Const.EzyCommand.LOGIN, new DataHandler.EzyLoginSuccessHandler());
         handlers.addHandler(Const.EzyCommand.APP_ACCESS, new DataHandler.EzyAppAccessHandler());
-        handlers.addHandler(Const.EzyCommand.APP_EXIT, new DataHandler.EzyAppExitHandler());
         handlers.addHandler(Const.EzyCommand.APP_REQUEST, new DataHandler.EzyAppResponseHandler());
+        handlers.addHandler(Const.EzyCommand.APP_EXIT, new DataHandler.EzyAppExitHandler());
         handlers.addHandler(Const.EzyCommand.PLUGIN_INFO, new DataHandler.EzyPluginInfoHandler());
         handlers.addHandler(Const.EzyCommand.PLUGIN_REQUEST, new DataHandler.EzyPluginResponseHandler());
         return handlers;

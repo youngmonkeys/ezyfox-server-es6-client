@@ -13,7 +13,7 @@ export const EzyCommand =  {
     APP_ACCESS_ERROR : {id: 34, name: "APP_ACCESS_ERROR"},
     APP_REQUEST_ERROR: {id: 35, name: "APP_REQUEST_ERROR"},
     PLUGIN_INFO : {id: 40, name: "PLUGIN_INFO"},
-    PLUGIN_REQUEST : {id: 41, name: "PLUGIN_REQUEST"},
+    PLUGIN_REQUEST : {id: 41, name: "PLUGIN_REQUEST"}
 }
 
 export var EzyCommands = EzyCommands || {};

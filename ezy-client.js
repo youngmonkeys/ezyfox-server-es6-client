@@ -10,9 +10,11 @@ class EzyConnector {
     constructor() {
         this.ws = null;
         this.destroyed = false;
+        this.disconnectReason = null;
     }
 
     connect (client, url) {
+        this.disconnectReason = null;
         this.ws = new WebSocket(url);
         var thiz = this;
         var failed = false;
@@ -22,8 +24,7 @@ class EzyConnector {
         this.ws.onerror = function (e) {
             Util.EzyLogger.console('connect to: ' + url + ' error : ' + JSON.stringify(e));
             failed = true;
-            var event = new Event.EzyConnectionFailureEvent(
-                Const.EzyConnectionFailedReason.UNKNOWN);
+            var event = new Event.EzyConnectionFailureEvent(Const.EzyConnectionFailedReason.UNKNOWN);
             eventMessageHandler.handleEvent(event);
         }
 
@@ -41,7 +42,7 @@ class EzyConnector {
             if(thiz.destroyed)
                 return;
             if(client.isConnected()) {
-                var reason = Const.EzyDisconnectReason.UNKNOWN;
+                var reason = thiz.disconnectReason || Const.EzyDisconnectReason.UNKNOWN;
                 eventMessageHandler.handleDisconnection(reason);
             }
             else {
@@ -59,9 +60,11 @@ class EzyConnector {
         }
     }
 
-    disconnect() {
-        if(this.ws)
+    disconnect(reason) {
+        if(this.ws) {
+            this.disconnectReason = reason;
             this.ws.close();
+        }
     }
 
     destroy() {
@@ -134,9 +137,9 @@ class EzyClient {
             clearTimeout(this.reconnectTimeout);
     }
 
-    disconnect() {
+    disconnect(reason) {
         if(this.connector)
-            this.connector.disconnect();
+            this.connector.disconnect(reason);
     }
 
     send(data) {
@@ -172,6 +175,16 @@ class EzyClient {
         if(!this.zone) return null;
         var pluginManager = this.zone.pluginManager;
         return pluginManager.getPluginById(pluginId);
+    }
+
+    getAppManager() {
+        if(!this.zone) return null;
+        return this.zone.appManager;
+    }
+
+    getPluginManager() {
+        if(!this.zone) return null;
+        return this.zone.pluginManager;
     }
 }
 

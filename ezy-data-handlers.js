@@ -51,6 +51,18 @@ export class EzyLoginSuccessHandler {
 
 //======================================
 
+export class EzyLoginErrorHandler {
+    handle(data) {
+        this.client.disconnect(401);
+        this.handleLoginError(data);
+    }
+
+    handleLoginError(data) {
+    }
+}
+
+//======================================
+
 export class EzyAppAccessHandler {
     handle(data) {
         var zone = this.client.zone;
@@ -94,6 +106,24 @@ export class EzyAppExitHandler {
 
 //======================================
 
+export class EzyAppResponseHandler {
+    handle(data) {
+        var appId = data[0];
+        var responseData = data[1];
+        var cmd = responseData[0];
+        var commandData = responseData[1];
+        
+        var app = this.client.getAppById(appId);
+        var handler = app.getDataHandler(cmd);
+        if(handler)
+            handler(app, commandData);
+        else
+            Util.EzyLogger.console("app: " + app.name + " has no handler for command: " + cmd);
+    }
+}
+
+//======================================
+
 export class EzyPluginInfoHandler {
     handle(data) {
         var zone = this.client.zone;
@@ -117,31 +147,6 @@ export class EzyPluginInfoHandler {
 
 //======================================
 
-class EzyPongHandler {
-    handle(client) {
-    }
-}
-
-//======================================
-
-export class EzyAppResponseHandler {
-    handle(data) {
-        var appId = data[0];
-        var responseData = data[1];
-        var cmd = responseData[0];
-        var commandData = responseData[1];
-        
-        var app = this.client.getAppById(appId);
-        var handler = app.getDataHandler(cmd);
-        if(handler)
-            handler(app, commandData);
-        else
-            Util.EzyLogger.console("app: " + app.name + " has no handler for command: " + cmd);
-    }
-}
-
-//======================================
-
 export class EzyPluginResponseHandler {
     handle(data) {
         var pluginId = data[0];
@@ -155,6 +160,13 @@ export class EzyPluginResponseHandler {
             handler(plugin, commandData);
         else
             Util.EzyLogger.console("plugin: " + plugin.name + " has no handler for command: " + cmd);
+    }
+}
+
+//======================================
+
+export class EzyPongHandler {
+    handle(client) {
     }
 }
 
@@ -222,12 +234,13 @@ export class EzyPluginDataHandlers {
 export default {
     EzyHandshakeHandler,
     EzyLoginSuccessHandler,
+    EzyLoginErrorHandler,
     EzyAppAccessHandler,
     EzyAppExitHandler,
-    EzyPluginInfoHandler,
-    EzyPongHandler,
     EzyAppResponseHandler,
+    EzyPluginInfoHandler,
     EzyPluginResponseHandler,
+    EzyPongHandler,
     EzyAppDataHandlers,
     EzyPluginDataHandlers,
     EzyDataHandlers

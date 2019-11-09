@@ -124,6 +124,7 @@ export class EzyHandlerManager {
         handlers.addHandler(Const.EzyCommand.PONG, new DataHandler.EzyPongHandler());
         handlers.addHandler(Const.EzyCommand.HANDSHAKE, new DataHandler.EzyHandshakeHandler());
         handlers.addHandler(Const.EzyCommand.LOGIN, new DataHandler.EzyLoginSuccessHandler());
+        handlers.addHandler(Const.EzyCommand.LOGIN_ERROR, new DataHandler.EzyLoginErrorHandler());
         handlers.addHandler(Const.EzyCommand.APP_ACCESS, new DataHandler.EzyAppAccessHandler());
         handlers.addHandler(Const.EzyCommand.APP_REQUEST, new DataHandler.EzyAppResponseHandler());
         handlers.addHandler(Const.EzyCommand.APP_EXIT, new DataHandler.EzyAppExitHandler());

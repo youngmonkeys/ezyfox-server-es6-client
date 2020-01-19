@@ -26,6 +26,7 @@ const Ezy = {
     DisconnectionHandler        : EventHandler.EzyDisconnectionHandler,
     HandshakeHandler            : DataHandler.EzyHandshakeHandler,
     LoginSuccessHandler         : DataHandler.EzyLoginSuccessHandler,
+    LoginErrorHandler           : DataHandler.EzyLoginErrorHandler,
     AppAccessHandler            : DataHandler.EzyAppAccessHandler,
     AppExitHandler              : DataHandler.EzyAppExitHandler,
     AppResponseHandler          : DataHandler.EzyAppResponseHandler,

@@ -114,6 +114,10 @@ export class EzyAppResponseHandler {
         var commandData = responseData[1];
         
         var app = this.client.getAppById(appId);
+        if(!app) {
+            Util.EzyLogger.console("receive message when has not joined app yet");
+            return;
+        }
         var handler = app.getDataHandler(cmd);
         if(handler)
             handler(app, commandData);

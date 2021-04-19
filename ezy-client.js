@@ -6,6 +6,9 @@ import Socket from './ezy-sockets'
 import EzySetup from './ezy-setup'
 import EzyEventMessageHandler from './ezy-event-message-handler'
 
+/**
+ * Wrapper for JS built-in WebSocket to communicate with websocket server
+ */
 class EzyConnector {
     constructor() {
         this.ws = null;
@@ -13,6 +16,16 @@ class EzyConnector {
         this.disconnectReason = null;
     }
 
+    /**
+     * Create connection to a websocket server
+     * Websocket events:
+     *      - onerror: fire when failing to connect
+     *      - onopen: fire if succeed to connect
+     *      - onclose: fire when connection is closed
+     *      - onmessage: fire when server send a message to client
+     * @param {EzyClient} client The client from which this connect function is called
+     * @param {string} url The websocket url
+     */
     connect (client, url) {
         this.disconnectReason = null;
         this.ws = new WebSocket(url);
@@ -51,7 +64,7 @@ class EzyConnector {
         }
 
         this.ws.onmessage = function (event) {
-            if(thiz.destroyed) 
+            if(thiz.destroyed)
                 return;
             pingManager.lostPingCount = 0;
             var data = event.data;
@@ -60,6 +73,10 @@ class EzyConnector {
         }
     }
 
+    /**
+     * Close the websocket connection with a reason
+     * @param {string} reason
+     */
     disconnect(reason) {
         if(this.ws) {
             this.disconnectReason = reason;
@@ -67,18 +84,33 @@ class EzyConnector {
         }
     }
 
+    /**
+     * Client purposely closes the websocket connection
+     */
     destroy() {
         this.destroyed = true;
         this.disconnect();
     }
 
+    /**
+     * Send data from client to websocket server
+     * @param {string} data
+     */
     send(data) {
         var json = JSON.stringify(data);
         this.ws.send(json);
     }
 }
 
+/**
+ * A central class that abstracts all the communications
+ * between client and server
+ */
 class EzyClient {
+    /**
+     * Create a client
+     * @param {EzyClientConfig} config Client name configuration and reconnect configuration
+     */
     constructor(config) {
         this.config = config;
         this.name = config.getClientName();
@@ -98,7 +130,11 @@ class EzyClient {
         this.eventMessageHandler = new EzyEventMessageHandler(this);
         this.pingSchedule.eventMessageHandler = this.eventMessageHandler;
     }
-    
+
+    /**
+     * Client connects to server via a websocket url
+     * @param url Websocket url
+     */
     connect(url) {
         this.url = url ? url : this.url;
         this.preconnect();
@@ -108,6 +144,12 @@ class EzyClient {
         this.connector.connect(this, this.url);
     }
 
+    /**
+     * Client tries to reconnect to previous connection
+     * @returns {boolean} - Whether or not the maxReconnectCount is reached
+     *      - `false`: reach maxReconnectCount
+     *      - `true`: otherwise
+     */
     reconnect() {
         var reconnectConfig = this.config.reconnect;
         var maxReconnectCount = reconnectConfig.maxReconnectCount;
@@ -119,7 +161,7 @@ class EzyClient {
             () => {
                 this.connector = new EzyConnector();
                 this.connector.connect(this, this.url);
-            }, 
+            },
             reconnectConfig.reconnectPeriod
         );
         this.reconnectCount ++;
@@ -127,6 +169,9 @@ class EzyClient {
         this.eventMessageHandler.handleEvent(event);
     }
 
+    /**
+     * Reset variables before creating a new connection
+     */
     preconnect() {
         this.zone = null;
         this.me = null;
@@ -137,15 +182,28 @@ class EzyClient {
             clearTimeout(this.reconnectTimeout);
     }
 
+    /**
+     * Client decides to disconnect from websocket connection with a reason
+     * @param {string} reason Reason to disconnect
+     */
     disconnect(reason) {
         if(this.connector)
             this.connector.disconnect(reason);
     }
 
+    /**
+     * Client sends data to websocket server
+     * @param data
+     */
     send(data) {
         this.connector.send(data);
     }
 
+    /**
+     * Client sends a command and data to server
+     * @param {string} cmd Command to be sent
+     * @param {string} data Data to be sent
+     */
     sendRequest(cmd, data) {
         if(!this.unloggableCommands.includes(cmd)) {
             Util.EzyLogger.console('send cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
@@ -154,34 +212,60 @@ class EzyClient {
         this.send(request);
     }
 
+    /**
+     * Listen to `disconnect` event from server
+     * @param reason Reason that server disconnect
+     */
     onDisconnected(reason) {
         this.status = Const.EzyConnectionStatus.DISCONNECTED;
         this.pingSchedule.stop();
         this.disconnect();
     }
 
+    /**
+     * Check connection status
+     * @returns {boolean} Whether or not the status is CONNECTED
+     */
     isConnected() {
         var connected = (this.status == Const.EzyConnectionStatus.CONNECTED);
         return connected;
     }
 
+    /**
+     * Get app from this client zone by id
+     * @param appId id of queried app
+     * @returns {EzyApp} Queried app
+     */
     getAppById(appId) {
         if(!this.zone) return null;
         var appManager = this.zone.appManager;
         return appManager.getAppById(appId);
     }
 
+    /**
+     * Get plugin from this client zone by id
+     * @param pluginId id of queried plugin
+     * @returns {EzyPlugin} Queried plugin
+     */
     getPluginById(pluginId) {
         if(!this.zone) return null;
         var pluginManager = this.zone.pluginManager;
         return pluginManager.getPluginById(pluginId);
     }
 
+    /**
+     * Get the app manager of this client zone
+     * @returns {EzyAppManager} App manager of current client zone
+     */
     getAppManager() {
         if(!this.zone) return null;
         return this.zone.appManager;
     }
 
+    /**
+     * Get the plugin manager of this client zone
+     * @returns {EzyPluginManager} Plugin manager of current client zone
+     */
     getPluginManager() {
         if(!this.zone) return null;
         return this.zone.pluginManager;

@@ -6,6 +6,9 @@ import Socket from './ezy-sockets'
 import EzySetup from './ezy-setup'
 import EzyEventMessageHandler from './ezy-event-message-handler'
 
+/**
+ * Wrapper for JS built-in WebSocket to communicate with websocket server
+ */
 class EzyConnector {
     constructor() {
         this.ws = null;
@@ -13,7 +16,17 @@ class EzyConnector {
         this.disconnectReason = null;
     }
 
-    connect (client, url) {
+    /**
+     * Create connection to a websocket server
+     * Websocket events:
+     *      - onerror: fire when connection to server is unsuccessful
+     *      - onopen: fire when connection to server is successful
+     *      - onclose: fire when connection to server is closed
+     *      - onmessage: fire when client receives a message from server
+     * @param {EzyClient} client The client from which this connect function is called
+     * @param {string} url The websocket url
+     */
+    connect(client, url) {
         this.disconnectReason = null;
         this.ws = new WebSocket(url);
         var thiz = this;
@@ -37,21 +50,20 @@ class EzyConnector {
         }
 
         this.ws.onclose = function (e) {
-            if(failed)
+            if (failed)
                 return;
-            if(thiz.destroyed)
+            if (thiz.destroyed)
                 return;
-            if(client.isConnected()) {
+            if (client.isConnected()) {
                 var reason = thiz.disconnectReason || Const.EzyDisconnectReason.UNKNOWN;
                 eventMessageHandler.handleDisconnection(reason);
-            }
-            else {
+            } else {
                 Util.EzyLogger.console('connection to: ' + url + " has disconnected before");
             }
         }
 
         this.ws.onmessage = function (event) {
-            if(thiz.destroyed) 
+            if (thiz.destroyed)
                 return;
             pingManager.lostPingCount = 0;
             var data = event.data;
@@ -60,25 +72,44 @@ class EzyConnector {
         }
     }
 
+    /**
+     * Close the websocket connection with a reason
+     * @param {string} reason
+     */
     disconnect(reason) {
-        if(this.ws) {
+        if (this.ws) {
             this.disconnectReason = reason;
             this.ws.close();
         }
     }
 
+    /**
+     * Client purposely closes the websocket connection
+     */
     destroy() {
         this.destroyed = true;
         this.disconnect();
     }
 
+    /**
+     * Send data from client to websocket server
+     * @param {string} data
+     */
     send(data) {
         var json = JSON.stringify(data);
         this.ws.send(json);
     }
 }
 
+/**
+ * A proxy class that combine all needed functions into one.
+ * Each zone has a client, which manages the connection to server within that zone
+ */
 class EzyClient {
+    /**
+     * Create a client
+     * @param {EzyClientConfig} config Client name configuration and reconnect configuration
+     */
     constructor(config) {
         this.config = config;
         this.name = config.getClientName();
@@ -98,7 +129,11 @@ class EzyClient {
         this.eventMessageHandler = new EzyEventMessageHandler(this);
         this.pingSchedule.eventMessageHandler = this.eventMessageHandler;
     }
-    
+
+    /**
+     * Connect to server via a websocket url
+     * @param url Websocket url
+     */
     connect(url) {
         this.url = url ? url : this.url;
         this.preconnect();
@@ -108,10 +143,16 @@ class EzyClient {
         this.connector.connect(this, this.url);
     }
 
+    /**
+     * Call to connect to server again
+     * @returns {boolean} - Whether or not the maxReconnectCount is reached
+     *      - `false`: reach maxReconnectCount
+     *      - `true`: otherwise
+     */
     reconnect() {
         var reconnectConfig = this.config.reconnect;
         var maxReconnectCount = reconnectConfig.maxReconnectCount;
-        if(this.reconnectCount >= maxReconnectCount)
+        if (this.reconnectCount >= maxReconnectCount)
             return false;
         this.preconnect();
         this.status = Const.EzyConnectionStatus.RECONNECTING;
@@ -119,71 +160,113 @@ class EzyClient {
             () => {
                 this.connector = new EzyConnector();
                 this.connector.connect(this, this.url);
-            }, 
+            },
             reconnectConfig.reconnectPeriod
         );
-        this.reconnectCount ++;
+        this.reconnectCount++;
         var event = new Event.EzyTryConnectEvent(this.reconnectCount);
         this.eventMessageHandler.handleEvent(event);
     }
 
+    /**
+     * Reset state before creating a new connection
+     */
     preconnect() {
         this.zone = null;
         this.me = null;
         this.appsById = {};
-        if(this.connector)
+        if (this.connector)
             this.connector.destroy();
-        if(this.reconnectTimeout)
+        if (this.reconnectTimeout)
             clearTimeout(this.reconnectTimeout);
     }
 
+    /**
+     * Call to disconnect from websocket server with a reason
+     * @param {string} reason Reason to disconnect
+     */
     disconnect(reason) {
-        if(this.connector)
+        if (this.connector)
             this.connector.disconnect(reason);
     }
 
+    /**
+     * Send data to websocket server
+     * @param data
+     */
     send(data) {
         this.connector.send(data);
     }
 
+    /**
+     * Send a command and data to server
+     * @param {string} cmd Command to be sent
+     * @param {string} data Data to be sent
+     */
     sendRequest(cmd, data) {
-        if(!this.unloggableCommands.includes(cmd)) {
+        if (!this.unloggableCommands.includes(cmd)) {
             Util.EzyLogger.console('send cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
         }
         var request = [cmd.id, data];
         this.send(request);
     }
 
+    /**
+     * Listen to `disconnect` event from server
+     * @param reason Reason that server disconnect
+     */
     onDisconnected(reason) {
         this.status = Const.EzyConnectionStatus.DISCONNECTED;
         this.pingSchedule.stop();
         this.disconnect();
     }
 
+    /**
+     * Check connection status
+     * @returns {boolean} Whether or not the status is CONNECTED
+     */
     isConnected() {
         var connected = (this.status == Const.EzyConnectionStatus.CONNECTED);
         return connected;
     }
 
+    /**
+     * Get app from this client zone by id
+     * @param appId id of queried app
+     * @returns {EzyApp} Queried app
+     */
     getAppById(appId) {
-        if(!this.zone) return null;
+        if (!this.zone) return null;
         var appManager = this.zone.appManager;
         return appManager.getAppById(appId);
     }
 
+    /**
+     * Get plugin from this client zone by id
+     * @param pluginId id of queried plugin
+     * @returns {EzyPlugin} Queried plugin
+     */
     getPluginById(pluginId) {
-        if(!this.zone) return null;
+        if (!this.zone) return null;
         var pluginManager = this.zone.pluginManager;
         return pluginManager.getPluginById(pluginId);
     }
 
+    /**
+     * Get the app manager of this client zone
+     * @returns {EzyAppManager} App manager of current client zone
+     */
     getAppManager() {
-        if(!this.zone) return null;
+        if (!this.zone) return null;
         return this.zone.appManager;
     }
 
+    /**
+     * Get the plugin manager of this client zone
+     * @returns {EzyPluginManager} Plugin manager of current client zone
+     */
     getPluginManager() {
-        if(!this.zone) return null;
+        if (!this.zone) return null;
         return this.zone.pluginManager;
     }
 }

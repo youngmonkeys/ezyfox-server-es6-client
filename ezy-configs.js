@@ -5,8 +5,12 @@ class EzyClientConfig {
         this.reconnect = new EzyReconnectConfig();
     }
 
+    /**
+     * Get client name of a zone
+     * @returns {string} Client name
+     */
     getClientName() {
-        if(this.clientName == "")
+        if (this.clientName == "")
             return this.zoneName;
         return this.clientName;
     }

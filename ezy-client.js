@@ -194,8 +194,8 @@ class EzyClient {
      * Send data to websocket server
      * @param data
      */
-    send(data) {
-        this.connector.send(data);
+    send(cmd, data) {
+        this.sendRequest(cmd, data)
     }
 
     /**
@@ -208,7 +208,7 @@ class EzyClient {
             Util.EzyLogger.console('send cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
         }
         var request = [cmd.id, data];
-        this.send(request);
+        this.connector.send(request);
     }
 
     /**

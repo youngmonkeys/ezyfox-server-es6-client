@@ -33,6 +33,10 @@ export class EzyApp {
         this.dataHandlers = client.handlerManager.getAppDataHandlers(name);
     }
 
+    send(cmd, data) {
+        this.sendRequest(cmd, data);
+    }
+
     sendRequest(cmd, data) {
         var validData = data;
         if(!validData)
@@ -56,6 +60,10 @@ export class EzyPlugin {
         this.client = client;
         this.zone = zone;
         this.dataHandlers = client.handlerManager.getPluginDataHandlers(name);
+    }
+
+    send(cmd, data) {
+        this.sendRequest(cmd, data);
     }
 
     sendRequest(cmd, data) {

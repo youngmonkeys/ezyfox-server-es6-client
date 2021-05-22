@@ -95,6 +95,7 @@ export class EzyDisconnectionHandler {
         if(!reconnecting) {
             this.control(event);
         }
+        this.postHandle(event);
     }
 
     preHandle(event) {
@@ -108,6 +109,9 @@ export class EzyDisconnectionHandler {
     }
 
     control(event) {
+    }
+
+    postHandle(event) {
     }
 }
 

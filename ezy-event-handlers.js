@@ -81,16 +81,20 @@ export class EzyConnectionFailureHandler {
 
 export class EzyDisconnectionHandler {
     handle(event) {
-        const reasonName = Const.EzyDisconnectReasonNames.parse(event.reason);
+        var reason = event.reason;
+        const reasonName = Const.EzyDisconnectReasonNames.parse(reason);
         Util.EzyLogger.console("handle disconnection, reason = " + reasonName);
         this.preHandle(event);
         var config = this.client.config;
         var reconnectConfig = config.reconnect;
         var should = this.shouldReconnect(event);
-        var must = reconnectConfig.enable && should;
+        var mustReconnect = reconnectConfig.enable && 
+            reason != Const.EzyDisconnectReason.UNAUTHORIZED &&
+            reason != Const.EzyDisconnectReason.CLOSE &&
+            should;
         var reconnecting = false;
         this.client.status = Const.EzyConnectionStatus.DISCONNECTED;
-        if(must)
+        if(mustReconnect)
             reconnecting = this.client.reconnect();
         if(!reconnecting) {
             this.control(event);

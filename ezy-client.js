@@ -119,7 +119,6 @@ class EzyClient {
         this.me = null;
         this.status = Const.EzyConnectionStatus.NULL;
         this.reconnectCount = 0;
-        this.disconnected = false;
         this.reconnectTimeout = null;
         this.pingManager = new Manager.EzyPingManager();
         this.pingSchedule = new Socket.EzyPingSchedule(this);
@@ -186,6 +185,11 @@ class EzyClient {
      * @param {string} reason Reason to disconnect
      */
     disconnect(reason) {
+        var actualReason = reason || Const.EzyDisconnectReason.CLOSE;
+        this.internalDisconnect(actualReason);
+    }
+
+    internalDisconnect(reason) {
         if (this.connector)
             this.connector.disconnect(reason);
     }
@@ -218,7 +222,7 @@ class EzyClient {
     onDisconnected(reason) {
         this.status = Const.EzyConnectionStatus.DISCONNECTED;
         this.pingSchedule.stop();
-        this.disconnect();
+        this.internalDisconnect();
     }
 
     /**

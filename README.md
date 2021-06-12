@@ -5,12 +5,18 @@ javascript emacs 6 client for ezyfox server
 
 javascript emacs 6 client for ezyfox server
 
+# Documentation
+
+[https://youngmonkeys.org/ezyfox-es6-client-sdk/](https://youngmonkeys.org/ezyfox-es6-client-sdk/)
+
 # Code Example
+
+You can find the full example [here](https://github.com/youngmonkeys/freechat/tree/master/reactjs/src/socket)
 
 **1. Create ws client**
 ```javascript
 var config = new Ezy.ClientConfig;
-config.zoneName = "freechat";
+config.zoneName = "zoneName";
 var clients = Ezy.Clients.getInstance();
 var client = clients.newDefaultClient(config);
 ```
@@ -23,25 +29,9 @@ setup.addEventHandler(Ezy.EventType.DISCONNECTION, disconnectionHandler);
 setup.addDataHandler(Ezy.Command.HANDSHAKE, handshakeHandler);
 setup.addDataHandler(Ezy.Command.LOGIN, userLoginHandler);
 setup.addDataHandler(Ezy.Command.APP_ACCESS, accessAppHandler);
-var setupApp = setup.setupApp("freechat");
-setupApp.addDataHandler("1", function(app, data) {
+var setupApp = setup.setupApp("appName");
+setupApp.addDataHandler("command", function(app, data) {
     controller.contactController.handleSuggestedContactsResponse(data);
-});
-
-setupApp.addDataHandler("2", function(app, data) {
-    controller.contactController.handleAddContactsResponse(data);
-});
-
-setupApp.addDataHandler("4", function(app, data) {
-    controller.messageController.handleSystemMessageResponse(data);
-});
-
-setupApp.addDataHandler("5", function(app, data) {
-    controller.contactController.handleContactsResponse(data);
-});
-
-setupApp.addDataHandler("6", function(app, data) {
-    controller.messageController.handleUserMessageResponse(data);
 });
 ```
 

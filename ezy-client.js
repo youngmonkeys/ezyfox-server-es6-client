@@ -189,6 +189,10 @@ class EzyClient {
         this.internalDisconnect(actualReason);
     }
 
+    close() {
+        this.disconnect();
+    }
+
     internalDisconnect(reason) {
         if (this.connector)
             this.connector.disconnect(reason);
@@ -232,6 +236,16 @@ class EzyClient {
     isConnected() {
         var connected = (this.status == Const.EzyConnectionStatus.CONNECTED);
         return connected;
+    }
+
+    /**
+     * Get first app from this client zone
+     * @returns {EzyApp} Queried app
+     */
+     getApp() {
+        if (!this.zone) return null;
+        var appManager = this.zone.appManager;
+        return appManager.getApp();
     }
 
     /**

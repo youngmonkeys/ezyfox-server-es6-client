@@ -100,8 +100,8 @@ export class EzyHandlerManager {
         this.client = client;
         this.dataHandlers = this.newDataHandlers();
         this.eventHandlers = this.newEventHandlers();
-        this.appDataHandlerss = {};
-        this.pluginDataHandlerss = {};
+        this.appDataHandlersByName = {};
+        this.pluginDataHandlersByName = {};
     }
 
     newEventHandlers() {
@@ -173,19 +173,19 @@ export class EzyHandlerManager {
     }
 
     getAppDataHandlers(appName) {
-        var answer = this.appDataHandlerss[appName];
+        var answer = this.appDataHandlersByName[appName];
         if (!answer) {
             answer = new DataHandler.EzyAppDataHandlers();
-            this.appDataHandlerss[appName] = answer;
+            this.appDataHandlersByName[appName] = answer;
         }
         return answer;
     }
 
     getPluginDataHandlers(pluginName) {
-        var answer = this.pluginDataHandlerss[pluginName];
+        var answer = this.pluginDataHandlersByName[pluginName];
         if (!answer) {
             answer = new DataHandler.EzyPluginDataHandlers();
-            this.pluginDataHandlerss[pluginName] = answer;
+            this.pluginDataHandlersByName[pluginName] = answer;
         }
         return answer;
     }

@@ -272,6 +272,10 @@ class EzyClient {
         return pluginManager.getPluginById(pluginId);
     }
 
+    newAppManager(zoneName) {
+        return new Manager.EzyAppManager(zoneName);
+    }
+
     /**
      * Get the app manager of this client zone
      * @returns {EzyAppManager} App manager of current client zone
@@ -279,6 +283,10 @@ class EzyClient {
     getAppManager() {
         if (!this.zone) return null;
         return this.zone.appManager;
+    }
+
+    newPluginManager(zoneName) {
+        return new Manager.EzyPluginManager(zoneName);
     }
 
     /**

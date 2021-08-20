@@ -1,5 +1,4 @@
 import Const from './ezy-constants';
-import Manager from './ezy-managers';
 
 //===================================================
 
@@ -17,8 +16,8 @@ export class EzyZone {
         this.id = id;
         this.name = name;
         this.client = client;
-        this.appManager = new Manager.EzyAppManager(name);
-        this.pluginManager = new Manager.EzyPluginManager(name);
+        this.appManager = client.newAppManager(name);
+        this.appManager = client.newPluginManager(name);
     }
 }
 

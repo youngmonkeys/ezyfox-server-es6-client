@@ -1,9 +1,8 @@
-import Const from './ezy-constants'
-import Util from './ezy-util'
-import Event from './ezy-events'
+import Const from './ezy-constants';
+import Util from './ezy-util';
+import Event from './ezy-events';
 
 class EzyEventMessageHandler {
-
     constructor(client) {
         this.client = client;
         this.handlerManager = client.handlerManager;
@@ -12,10 +11,11 @@ class EzyEventMessageHandler {
 
     handleEvent(event) {
         var eventHandler = this.handlerManager.getEventHandler(event.getType());
-        if(eventHandler)
-            eventHandler.handle(event);
+        if (eventHandler) eventHandler.handle(event);
         else
-            Util.EzyLogger.console('has no handler with event: ' + event.getType());
+            Util.EzyLogger.console(
+                'has no handler with event: ' + event.getType()
+            );
     }
 
     handleDisconnection(reason) {
@@ -27,12 +27,13 @@ class EzyEventMessageHandler {
     handleMessage(message) {
         var cmd = Const.EzyCommands[message[0]];
         var data = message.length > 1 ? message[1] : [];
-        if(!this.unloggableCommands.includes(cmd))
-            Util.EzyLogger.console('received cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
-        if(cmd === Const.EzyCommand.DISCONNECT)
+        if (!this.unloggableCommands.includes(cmd))
+            Util.EzyLogger.console(
+                'received cmd: ' + cmd.name + ', data: ' + JSON.stringify(data)
+            );
+        if (cmd === Const.EzyCommand.DISCONNECT)
             this.handleDisconnectionData(data);
-        else
-            this.handleResponseData(cmd, data);
+        else this.handleResponseData(cmd, data);
     }
 
     handleDisconnectionData(resonseData) {
@@ -42,11 +43,9 @@ class EzyEventMessageHandler {
 
     handleResponseData(cmd, responseData) {
         var handler = this.handlerManager.getDataHandler(cmd);
-        if(handler)
-            handler.handle(responseData);
-        else
-            Util.EzyLogger.console("has no handler with command: " + cmd.name);
+        if (handler) handler.handle(responseData);
+        else Util.EzyLogger.console('has no handler with command: ' + cmd.name);
     }
 }
 
-export default EzyEventMessageHandler
+export default EzyEventMessageHandler;

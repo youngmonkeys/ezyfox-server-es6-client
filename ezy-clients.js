@@ -1,4 +1,4 @@
-import EzyClient from './ezy-client'
+import EzyClient from './ezy-client';
 
 /**
  * Singleton object to manage all clients of a server.
@@ -8,7 +8,7 @@ import EzyClient from './ezy-client'
 class EzyClients {
     constructor() {
         this.clients = {};
-        this.defaultClientName = "";
+        this.defaultClientName = '';
     }
 
     /**
@@ -30,8 +30,7 @@ class EzyClients {
     newClient(config) {
         var client = new EzyClient(config);
         this.addClient(client);
-        if (this.defaultClientName == "")
-            this.defaultClientName = client.name;
+        if (this.defaultClientName === '') this.defaultClientName = client.name;
         return client;
     }
 
@@ -72,4 +71,4 @@ class EzyClients {
     }
 }
 
-export default EzyClients
+export default EzyClients;

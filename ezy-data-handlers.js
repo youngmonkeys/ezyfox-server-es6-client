@@ -1,6 +1,6 @@
-import Const from './ezy-constants'
-import Util from './ezy-util'
-import Entity from './ezy-entities'
+import Const from './ezy-constants';
+import Util from './ezy-util';
+import Entity from './ezy-entities';
 
 /**
  * A listener which fires when client receives Const.EzyCommand.HANDSHAKE command from server.
@@ -31,32 +31,30 @@ import Entity from './ezy-entities'
  * ```
  */
 export class EzyHandshakeHandler {
-
     /**
      * Automatically call this function when client receives HANDSHAKE command
      * from server.
      * @param data [encryptedServerPublicKey, token, sessionId]
      */
-	handle(data) {
-		this.startPing();
-		this.handleLogin();
-		this.postHandle(data);
-	}
+    handle(data) {
+        this.startPing();
+        this.handleLogin();
+        this.postHandle(data);
+    }
 
     /**
      * This function need to be manually defined to specify
      * what to do after sending login request
      * @param data: [encryptedServerPublicKey, token, sessionId]
      */
-	postHandle(data) {
-    }
+    postHandle(data) {}
 
     /**
      * Send loginRequest to server
      */
-	handleLogin() {
-		var loginRequest = this.getLoginRequest();
-		this.client.sendRequest(Const.EzyCommand.LOGIN, loginRequest);
+    handleLogin() {
+        var loginRequest = this.getLoginRequest();
+        this.client.sendRequest(Const.EzyCommand.LOGIN, loginRequest);
     }
 
     /**
@@ -65,15 +63,15 @@ export class EzyHandshakeHandler {
      * @returns [zonename, username, password, data]
      */
     getLoginRequest() {
-        return ["test", "test", "test", []];
-	}
+        return ['test', 'test', 'test', []];
+    }
 
     /**
      * Start sending ping request
      */
-	startPing() {
-		this.client.pingSchedule.start();
-	}
+    startPing() {
+        this.client.pingSchedule.start();
+    }
 }
 
 //======================================
@@ -106,7 +104,9 @@ export class EzyLoginSuccessHandler {
         this.client.me = user;
         this.client.zone = zone;
         this.handleLoginSuccess(responseData);
-        Util.EzyLogger.console("user: " + user.name + " logged in successfully");
+        Util.EzyLogger.console(
+            'user: ' + user.name + ' logged in successfully'
+        );
     }
 
     /**
@@ -114,8 +114,7 @@ export class EzyLoginSuccessHandler {
      * do after successful login
      * @param responseData Additional data received from server
      */
-    handleLoginSuccess(responseData) {
-    }
+    handleLoginSuccess(responseData) {}
 }
 
 //======================================
@@ -146,8 +145,7 @@ export class EzyLoginErrorHandler {
      * do after unsuccessful login
      * @param data [errorId, errorMessage]
      */
-    handleLoginError(data) {
-    }
+    handleLoginError(data) {}
 }
 
 //======================================
@@ -175,7 +173,7 @@ export class EzyAppAccessHandler {
         var app = this.newApp(zone, data);
         appManager.addApp(app);
         this.postHandle(app, data);
-        Util.EzyLogger.console("access app: " + app.name + " successfully");
+        Util.EzyLogger.console('access app: ' + app.name + ' successfully');
     }
 
     /**
@@ -197,8 +195,7 @@ export class EzyAppAccessHandler {
      * @param app {EzyApp} App has just been created
      * @param data {array} [appId, appName, data=[]]
      */
-    postHandle(app, data) {
-    }
+    postHandle(app, data) {}
 }
 
 //======================================
@@ -220,13 +217,15 @@ export class EzyAppExitHandler {
      */
     handle(data) {
         var zone = this.client.zone;
-        var appManager = zone.appManager
+        var appManager = zone.appManager;
         var appId = data[0];
         var reasonId = data[1];
         var app = appManager.removeApp(appId);
-        if(app) {
+        if (app) {
             this.postHandle(app, data);
-            Util.EzyLogger.console("user exit app: " + app.name + ", reason: " + reasonId);
+            Util.EzyLogger.console(
+                'user exit app: ' + app.name + ', reason: ' + reasonId
+            );
         }
     }
 
@@ -236,9 +235,7 @@ export class EzyAppExitHandler {
      * @param app {EzyApp} App has just been removed
      * @param data {array} [appId, reasonId]
      */
-    postHandle(app, data) {
-    }
-
+    postHandle(app, data) {}
 }
 
 //======================================
@@ -263,15 +260,18 @@ export class EzyAppResponseHandler {
         var commandData = responseData[1];
 
         var app = this.client.getAppById(appId);
-        if(!app) {
-            Util.EzyLogger.console("receive message when has not joined app yet");
+        if (!app) {
+            Util.EzyLogger.console(
+                'receive message when has not joined app yet'
+            );
             return;
         }
         var handler = app.getDataHandler(cmd);
-        if(handler)
-            handler(app, commandData);
+        if (handler) handler(app, commandData);
         else
-            Util.EzyLogger.console("app: " + app.name + " has no handler for command: " + cmd);
+            Util.EzyLogger.console(
+                'app: ' + app.name + ' has no handler for command: ' + cmd
+            );
     }
 }
 
@@ -299,7 +299,9 @@ export class EzyPluginInfoHandler {
         var plugin = this.newPlugin(zone, data);
         pluginManager.addPlugin(plugin);
         this.postHandle(plugin, data);
-        Util.EzyLogger.console("request plugin: " + plugin.name + " info successfully");
+        Util.EzyLogger.console(
+            'request plugin: ' + plugin.name + ' info successfully'
+        );
     }
     /**
      * Create an EzyPlugin entity for client
@@ -310,7 +312,12 @@ export class EzyPluginInfoHandler {
     newPlugin(zone, data) {
         var pluginId = data[0];
         var pluginName = data[1];
-        var plugin = new Entity.EzyPlugin(this.client, zone, pluginId, pluginName);
+        var plugin = new Entity.EzyPlugin(
+            this.client,
+            zone,
+            pluginId,
+            pluginName
+        );
         return plugin;
     }
 
@@ -320,8 +327,7 @@ export class EzyPluginInfoHandler {
      * @param plugin {EzyPlugin} Plugin has just been created
      * @param data {array} [pluginId, pluginName, data=[]]
      */
-    postHandle(plugin, data) {
-    }
+    postHandle(plugin, data) {}
 }
 
 //======================================
@@ -347,10 +353,11 @@ export class EzyPluginResponseHandler {
 
         var plugin = this.client.getPluginById(pluginId);
         var handler = plugin.getDataHandler(cmd);
-        if(handler)
-            handler(plugin, commandData);
+        if (handler) handler(plugin, commandData);
         else
-            Util.EzyLogger.console("plugin: " + plugin.name + " has no handler for command: " + cmd);
+            Util.EzyLogger.console(
+                'plugin: ' + plugin.name + ' has no handler for command: ' + cmd
+            );
     }
 }
 
@@ -360,8 +367,7 @@ export class EzyPluginResponseHandler {
  * from server
  */
 export class EzyPongHandler {
-    handle(client) {
-    }
+    handle(client) {}
 }
 
 //======================================
@@ -406,9 +412,8 @@ export class EzyDataHandlers {
  * Manager class of all data handlers of an app
  */
 export class EzyAppDataHandlers {
-
     constructor() {
-        this.handlers = {}
+        this.handlers = {};
     }
 
     /**
@@ -429,7 +434,6 @@ export class EzyAppDataHandlers {
         var handler = this.handlers[cmd];
         return handler;
     }
-
 }
 
 //======================================
@@ -437,9 +441,8 @@ export class EzyAppDataHandlers {
  * Manager class of all data handlers of a plugin.
  */
 export class EzyPluginDataHandlers {
-
     constructor() {
-        this.handlers = {}
+        this.handlers = {};
     }
 
     /**
@@ -460,7 +463,6 @@ export class EzyPluginDataHandlers {
         var handler = this.handlers[cmd];
         return handler;
     }
-
 }
 
 //======================================
@@ -477,5 +479,5 @@ export default {
     EzyPongHandler,
     EzyAppDataHandlers,
     EzyPluginDataHandlers,
-    EzyDataHandlers
-}
+    EzyDataHandlers,
+};

@@ -1,11 +1,10 @@
-import Const from './ezy-constants'
-import Util from './ezy-util'
+import Const from './ezy-constants';
+import Util from './ezy-util';
 
 export class EzyConnectionSuccessHandler {
-
     constructor() {
-        this.clientType = "JSEMACS6";
-        this.clientVersion = "1.0.0";
+        this.clientType = 'JSEMACS6';
+        this.clientVersion = '1.0.0';
     }
 
     handle() {
@@ -13,8 +12,7 @@ export class EzyConnectionSuccessHandler {
         this.postHandle();
     }
 
-    postHandle() {
-    }
+    postHandle() {}
 
     sendHandshakeRequest() {
         var request = this.newHandshakeRequest();
@@ -26,12 +24,19 @@ export class EzyConnectionSuccessHandler {
         var clientKey = this.getClientKey();
         var enableEncryption = false;
         var token = this.getStoredToken();
-        var request = [clientId, clientKey, this.clientType, this.clientVersion, enableEncryption, token];
+        var request = [
+            clientId,
+            clientKey,
+            this.clientType,
+            this.clientVersion,
+            enableEncryption,
+            token,
+        ];
         return request;
     }
 
     getClientKey() {
-        return "";
+        return '';
     }
 
     getClientId() {
@@ -40,30 +45,27 @@ export class EzyConnectionSuccessHandler {
     }
 
     getStoredToken() {
-        return "";
+        return '';
     }
-
 }
 
 //======================================
 
 export class EzyConnectionFailureHandler {
-
     handle(event) {
-        Util.EzyLogger.console("connection failure, reason = " + event.reason);
+        Util.EzyLogger.console('connection failure, reason = ' + event.reason);
         var config = this.client.config;
         var reconnectConfig = config.reconnect;
         var should = this.shouldReconnect(event);
         var must = reconnectConfig.enable && should;
         var reconnecting = false;
         this.client.status = Const.EzyConnectionStatus.FAILURE;
-        if(must) {
+        if (must) {
             reconnecting = this.client.reconnect();
         }
-        if(reconnecting) {
+        if (reconnecting) {
             this.onReconnecting(event);
-        }
-        else {
+        } else {
             this.onDisconnected(event);
         }
         this.postHandle(event);
@@ -73,15 +75,11 @@ export class EzyConnectionFailureHandler {
         return true;
     }
 
-    onReconnecting(event) {
-    }
+    onReconnecting(event) {}
 
-    onDisconnected(event) {
-    }
+    onDisconnected(event) {}
 
-    postHandle(event) {
-    }
-
+    postHandle(event) {}
 }
 
 //======================================
@@ -90,47 +88,43 @@ export class EzyDisconnectionHandler {
     handle(event) {
         var reason = event.reason;
         const reasonName = Const.EzyDisconnectReasonNames.parse(reason);
-        Util.EzyLogger.console("handle disconnection, reason = " + reasonName);
+        Util.EzyLogger.console('handle disconnection, reason = ' + reasonName);
         this.preHandle(event);
         var config = this.client.config;
         var reconnectConfig = config.reconnect;
         var should = this.shouldReconnect(event);
-        var mustReconnect = reconnectConfig.enable && 
-            reason != Const.EzyDisconnectReason.UNAUTHORIZED &&
-            reason != Const.EzyDisconnectReason.CLOSE &&
+        var mustReconnect =
+            reconnectConfig.enable &&
+            reason !== Const.EzyDisconnectReason.UNAUTHORIZED &&
+            reason !== Const.EzyDisconnectReason.CLOSE &&
             should;
         var reconnecting = false;
         this.client.status = Const.EzyConnectionStatus.DISCONNECTED;
-        if(mustReconnect) {
+        if (mustReconnect) {
             reconnecting = this.client.reconnect();
         }
-        if(reconnecting) {
+        if (reconnecting) {
             this.onReconnecting(event);
-        }
-        else {
+        } else {
             this.onDisconnected(event);
         }
         this.postHandle(event);
     }
 
-    preHandle(event) {
-    }
+    preHandle(event) {}
 
     shouldReconnect(event) {
         var reason = event.reason;
-        if(reason == Const.EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
+        if (reason === Const.EzyDisconnectReason.ANOTHER_SESSION_LOGIN)
             return false;
         return true;
     }
 
-    onReconnecting(event) {
-    }
+    onReconnecting(event) {}
 
-    onDisconnected(event) {
-    }
+    onDisconnected(event) {}
 
-    postHandle(event) {
-    }
+    postHandle(event) {}
 }
 
 //======================================
@@ -158,5 +152,5 @@ export default {
     EzyConnectionSuccessHandler,
     EzyConnectionFailureHandler,
     EzyDisconnectionHandler,
-    EzyEventHandlers
-}
+    EzyEventHandlers,
+};

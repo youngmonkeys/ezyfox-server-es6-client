@@ -1,5 +1,5 @@
-import Const from './ezy-constants'
-import Manager from './ezy-managers'
+import Const from './ezy-constants';
+import Manager from './ezy-managers';
 
 //===================================================
 
@@ -39,8 +39,7 @@ export class EzyApp {
 
     sendRequest(cmd, data) {
         var validData = data;
-        if(!validData)
-            validData = {};
+        if (!validData) validData = {};
         var requestData = [this.id, [cmd, validData]];
         this.client.sendRequest(Const.EzyCommand.APP_REQUEST, requestData);
     }
@@ -68,8 +67,7 @@ export class EzyPlugin {
 
     sendRequest(cmd, data) {
         var validData = data;
-        if(!validData)
-            validData = {};
+        if (!validData) validData = {};
         var requestData = [this.id, [cmd, validData]];
         this.client.sendRequest(Const.EzyCommand.PLUGIN_REQUEST, requestData);
     }
@@ -82,4 +80,4 @@ export class EzyPlugin {
 
 //===================================================
 
-export default {EzyUser, EzyZone, EzyApp, EzyPlugin}
+export default { EzyUser, EzyZone, EzyApp, EzyPlugin };

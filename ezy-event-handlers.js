@@ -24,7 +24,7 @@ export class EzyConnectionSuccessHandler {
     newHandshakeRequest() {
         var clientId = this.getClientId();
         var clientKey = this.getClientKey();
-        var enableEncryption = this.isEnableEncryption();
+        var enableEncryption = false;
         var token = this.getStoredToken();
         var request = [clientId, clientKey, this.clientType, this.clientVersion, enableEncryption, token];
         return request;
@@ -37,10 +37,6 @@ export class EzyConnectionSuccessHandler {
     getClientId() {
         const guid = Util.EzyGuid.generate();
         return guid;
-    }
-
-    isEnableEncryption() {
-        return false;
     }
 
     getStoredToken() {
@@ -61,18 +57,29 @@ export class EzyConnectionFailureHandler {
         var must = reconnectConfig.enable && should;
         var reconnecting = false;
         this.client.status = Const.EzyConnectionStatus.FAILURE;
-        if(must)
+        if(must) {
             reconnecting = this.client.reconnect();
-        if(!reconnecting) {
-            this.control(event);
         }
+        if(reconnecting) {
+            this.onReconnecting(event);
+        }
+        else {
+            this.onDisconnected(event);
+        }
+        this.postHandle(event);
     }
 
     shouldReconnect(event) {
         return true;
     }
 
-    control(event) {
+    onReconnecting(event) {
+    }
+
+    onDisconnected(event) {
+    }
+
+    postHandle(event) {
     }
 
 }
@@ -94,10 +101,14 @@ export class EzyDisconnectionHandler {
             should;
         var reconnecting = false;
         this.client.status = Const.EzyConnectionStatus.DISCONNECTED;
-        if(mustReconnect)
+        if(mustReconnect) {
             reconnecting = this.client.reconnect();
-        if(!reconnecting) {
-            this.control(event);
+        }
+        if(reconnecting) {
+            this.onReconnecting(event);
+        }
+        else {
+            this.onDisconnected(event);
         }
         this.postHandle(event);
     }
@@ -112,7 +123,10 @@ export class EzyDisconnectionHandler {
         return true;
     }
 
-    control(event) {
+    onReconnecting(event) {
+    }
+
+    onDisconnected(event) {
     }
 
     postHandle(event) {

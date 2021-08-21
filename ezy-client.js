@@ -1,10 +1,10 @@
-import Const from './ezy-constants'
-import Util from './ezy-util'
-import Event from './ezy-events'
-import Manager from './ezy-managers'
-import Socket from './ezy-sockets'
-import EzySetup from './ezy-setup'
-import EzyEventMessageHandler from './ezy-event-message-handler'
+import Const from './ezy-constants';
+import Util from './ezy-util';
+import Event from './ezy-events';
+import Manager from './ezy-managers';
+import Socket from './ezy-sockets';
+import EzySetup from './ezy-setup';
+import EzyEventMessageHandler from './ezy-event-message-handler';
 
 /**
  * Wrapper for JS built-in WebSocket to communicate with websocket server
@@ -29,17 +29,21 @@ class EzyConnector {
     connect(client, url) {
         this.disconnectReason = null;
         this.ws = new WebSocket(url);
-        var thiz = this;
+        let that = this;
         var failed = false;
-        var pingManager = client.pingManager;
-        var eventMessageHandler = client.eventMessageHandler;
+        let pingManager = client.pingManager;
+        let eventMessageHandler = client.eventMessageHandler;
 
         this.ws.onerror = function (e) {
-            Util.EzyLogger.console('connect to: ' + url + ' error : ' + JSON.stringify(e));
+            Util.EzyLogger.console(
+                'connect to: ' + url + ' error : ' + JSON.stringify(e)
+            );
             failed = true;
-            var event = new Event.EzyConnectionFailureEvent(Const.EzyConnectionFailedReason.UNKNOWN);
+            var event = new Event.EzyConnectionFailureEvent(
+                Const.EzyConnectionFailedReason.UNKNOWN
+            );
             eventMessageHandler.handleEvent(event);
-        }
+        };
 
         this.ws.onopen = function (e) {
             Util.EzyLogger.console('connected to: ' + url);
@@ -47,29 +51,29 @@ class EzyConnector {
             client.status = Const.EzyConnectionStatus.CONNECTED;
             var event = new Event.EzyConnectionSuccessEvent();
             eventMessageHandler.handleEvent(event);
-        }
+        };
 
         this.ws.onclose = function (e) {
-            if (failed)
-                return;
-            if (thiz.destroyed)
-                return;
+            if (failed) return;
+            if (that.destroyed) return;
             if (client.isConnected()) {
-                var reason = thiz.disconnectReason || Const.EzyDisconnectReason.UNKNOWN;
+                var reason =
+                    that.disconnectReason || Const.EzyDisconnectReason.UNKNOWN;
                 eventMessageHandler.handleDisconnection(reason);
             } else {
-                Util.EzyLogger.console('connection to: ' + url + " has disconnected before");
+                Util.EzyLogger.console(
+                    'connection to: ' + url + ' has disconnected before'
+                );
             }
-        }
+        };
 
         this.ws.onmessage = function (event) {
-            if (thiz.destroyed)
-                return;
+            if (that.destroyed) return;
             pingManager.lostPingCount = 0;
             var data = event.data;
             var message = JSON.parse(data);
             eventMessageHandler.handleMessage(message);
-        }
+        };
     }
 
     /**
@@ -124,7 +128,10 @@ class EzyClient {
         this.pingSchedule = new Socket.EzyPingSchedule(this);
         this.handlerManager = new Manager.EzyHandlerManager(this);
         this.setup = new EzySetup(this.handlerManager);
-        this.unloggableCommands = [Const.EzyCommand.PING, Const.EzyCommand.PONG];
+        this.unloggableCommands = [
+            Const.EzyCommand.PING,
+            Const.EzyCommand.PONG,
+        ];
         this.eventMessageHandler = new EzyEventMessageHandler(this);
         this.pingSchedule.eventMessageHandler = this.eventMessageHandler;
     }
@@ -151,17 +158,13 @@ class EzyClient {
     reconnect() {
         var reconnectConfig = this.config.reconnect;
         var maxReconnectCount = reconnectConfig.maxReconnectCount;
-        if (this.reconnectCount >= maxReconnectCount)
-            return false;
+        if (this.reconnectCount >= maxReconnectCount) return false;
         this.preconnect();
         this.status = Const.EzyConnectionStatus.RECONNECTING;
-        this.reconnectTimeout = setTimeout(
-            () => {
-                this.connector = new EzyConnector();
-                this.connector.connect(this, this.url);
-            },
-            reconnectConfig.reconnectPeriod
-        );
+        this.reconnectTimeout = setTimeout(() => {
+            this.connector = new EzyConnector();
+            this.connector.connect(this, this.url);
+        }, reconnectConfig.reconnectPeriod);
         this.reconnectCount++;
         var event = new Event.EzyTryConnectEvent(this.reconnectCount);
         this.eventMessageHandler.handleEvent(event);
@@ -174,10 +177,8 @@ class EzyClient {
         this.zone = null;
         this.me = null;
         this.appsById = {};
-        if (this.connector)
-            this.connector.destroy();
-        if (this.reconnectTimeout)
-            clearTimeout(this.reconnectTimeout);
+        if (this.connector) this.connector.destroy();
+        if (this.reconnectTimeout) clearTimeout(this.reconnectTimeout);
     }
 
     /**
@@ -194,8 +195,7 @@ class EzyClient {
     }
 
     internalDisconnect(reason) {
-        if (this.connector)
-            this.connector.disconnect(reason);
+        if (this.connector) this.connector.disconnect(reason);
     }
 
     /**
@@ -203,7 +203,7 @@ class EzyClient {
      * @param data
      */
     send(cmd, data) {
-        this.sendRequest(cmd, data)
+        this.sendRequest(cmd, data);
     }
 
     /**
@@ -213,7 +213,9 @@ class EzyClient {
      */
     sendRequest(cmd, data) {
         if (!this.unloggableCommands.includes(cmd)) {
-            Util.EzyLogger.console('send cmd: ' + cmd.name + ", data: " + JSON.stringify(data));
+            Util.EzyLogger.console(
+                'send cmd: ' + cmd.name + ', data: ' + JSON.stringify(data)
+            );
         }
         var request = [cmd.id, data];
         this.connector.send(request);
@@ -234,7 +236,7 @@ class EzyClient {
      * @returns {boolean} Whether or not the status is CONNECTED
      */
     isConnected() {
-        var connected = (this.status == Const.EzyConnectionStatus.CONNECTED);
+        var connected = this.status === Const.EzyConnectionStatus.CONNECTED;
         return connected;
     }
 
@@ -242,7 +244,7 @@ class EzyClient {
      * Get first app from this client zone
      * @returns {EzyApp} Queried app
      */
-     getApp() {
+    getApp() {
         if (!this.zone) return null;
         var appManager = this.zone.appManager;
         return appManager.getApp();
@@ -270,6 +272,10 @@ class EzyClient {
         return pluginManager.getPluginById(pluginId);
     }
 
+    newAppManager(zoneName) {
+        return new Manager.EzyAppManager(zoneName);
+    }
+
     /**
      * Get the app manager of this client zone
      * @returns {EzyAppManager} App manager of current client zone
@@ -277,6 +283,10 @@ class EzyClient {
     getAppManager() {
         if (!this.zone) return null;
         return this.zone.appManager;
+    }
+
+    newPluginManager(zoneName) {
+        return new Manager.EzyPluginManager(zoneName);
     }
 
     /**
@@ -289,4 +299,4 @@ class EzyClient {
     }
 }
 
-export default EzyClient
+export default EzyClient;

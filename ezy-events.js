@@ -1,11 +1,9 @@
-import Const from './ezy-constants'
+import Const from './ezy-constants';
 
 export class EzyConnectionSuccessEvent {
-
     getType() {
         return Const.EzyEventType.CONNECTION_SUCCESS;
     }
-
 }
 
 export class EzyTryConnectEvent {
@@ -19,7 +17,6 @@ export class EzyTryConnectEvent {
 }
 
 export class EzyConnectionFailureEvent {
-
     constructor(reason) {
         this.reason = reason;
     }
@@ -27,7 +24,6 @@ export class EzyConnectionFailureEvent {
     getType() {
         return Const.EzyEventType.CONNECTION_FAILURE;
     }
-
 }
 
 export class EzyLostPingEvent {
@@ -41,7 +37,6 @@ export class EzyLostPingEvent {
 }
 
 export class EzyDisconnectionEvent {
-
     constructor(reason) {
         this.reason = reason;
     }
@@ -49,7 +44,6 @@ export class EzyDisconnectionEvent {
     getType() {
         return Const.EzyEventType.DISCONNECTION;
     }
-
 }
 
 export default {
@@ -57,5 +51,5 @@ export default {
     EzyTryConnectEvent,
     EzyConnectionFailureEvent,
     EzyLostPingEvent,
-    EzyDisconnectionEvent
-}
+    EzyDisconnectionEvent,
+};

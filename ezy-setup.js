@@ -17,8 +17,9 @@ class EzySetup {
 
     setupApp(appName) {
         var appSetup = this.appSetups[appName];
-        if(!appSetup) {
-            var appDataHandlers = this.handlerManager.getAppDataHandlers(appName);
+        if (!appSetup) {
+            var appDataHandlers =
+                this.handlerManager.getAppDataHandlers(appName);
             appSetup = new EzyAppSetup(appDataHandlers, this);
             this.appSetups[appName] = appSetup;
         }
@@ -27,8 +28,9 @@ class EzySetup {
 
     setupPlugin(pluginName) {
         var pluginSetup = this.pluginSetups[pluginName];
-        if(!pluginSetup) {
-            var pluginDataHandlers = this.handlerManager.getPluginDataHandlers(pluginName);
+        if (!pluginSetup) {
+            var pluginDataHandlers =
+                this.handlerManager.getPluginDataHandlers(pluginName);
             pluginSetup = new EzyPluginSetup(pluginDataHandlers, this);
             this.pluginSetups[pluginName] = pluginSetup;
         }
@@ -37,7 +39,6 @@ class EzySetup {
 }
 
 class EzyAppSetup {
-
     constructor(dataHandlers, parent) {
         this.parent = parent;
         this.dataHandlers = dataHandlers;
@@ -54,7 +55,6 @@ class EzyAppSetup {
 }
 
 class EzyPluginSetup {
-
     constructor(dataHandlers, parent) {
         this.parent = parent;
         this.dataHandlers = dataHandlers;
@@ -70,5 +70,4 @@ class EzyPluginSetup {
     }
 }
 
-
-export default EzySetup
+export default EzySetup;

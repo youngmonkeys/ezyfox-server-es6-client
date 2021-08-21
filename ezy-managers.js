@@ -1,10 +1,9 @@
-import Const from './ezy-constants'
-import Util from './ezy-util'
-import DataHandler from './ezy-data-handlers'
-import EventHandler from './ezy-event-handlers'
+import Const from './ezy-constants';
+import Util from './ezy-util';
+import DataHandler from './ezy-data-handlers';
+import EventHandler from './ezy-event-handlers';
 
 export class EzyAppManager {
-
     constructor(zoneName) {
         this.zoneName = zoneName;
         this.appList = [];
@@ -14,10 +13,8 @@ export class EzyAppManager {
 
     getApp() {
         var app = null;
-        if(this.appList.length > 0)
-           app = this.appList[0];
-        else
-            Util.EzyLogger.console('has no app in zone: ' + this.zoneName);
+        if (this.appList.length > 0) app = this.appList[0];
+        else Util.EzyLogger.console('has no app in zone: ' + this.zoneName);
         return app;
     }
 
@@ -29,10 +26,10 @@ export class EzyAppManager {
 
     removeApp(appId) {
         var app = this.appsById[appId];
-        if(app) {
+        if (app) {
             delete this.appsById[appId];
             delete this.appsByName[app.name];
-            this.appList = this.appList.filter(item => item.id != appId);
+            this.appList = this.appList.filter((item) => item.id !== appId);
         }
         return app;
     }
@@ -51,7 +48,6 @@ export class EzyAppManager {
 //======================================
 
 export class EzyPluginManager {
-
     constructor(zoneName) {
         this.zoneName = zoneName;
         this.pluginList = [];
@@ -61,10 +57,8 @@ export class EzyPluginManager {
 
     getPlugin() {
         var plugin = null;
-        if(this.pluginList.length > 0)
-           plugin = this.pluginList[0];
-        else
-            Util.EzyLogger.console('has no plugin in zone: ' + this.zoneName);
+        if (this.pluginList.length > 0) plugin = this.pluginList[0];
+        else Util.EzyLogger.console('has no plugin in zone: ' + this.zoneName);
         return plugin;
     }
 
@@ -95,41 +89,76 @@ export class EzyPingManager {
     }
 
     increaseLostPingCount() {
-        return (++ this.lostPingCount);
+        return ++this.lostPingCount;
     }
 }
 
 //======================================
 
 export class EzyHandlerManager {
-
     constructor(client) {
         this.client = client;
         this.dataHandlers = this.newDataHandlers();
         this.eventHandlers = this.newEventHandlers();
-        this.appDataHandlerss = {};
-        this.pluginDataHandlerss = {};
+        this.appDataHandlersByName = {};
+        this.pluginDataHandlersByName = {};
     }
 
     newEventHandlers() {
         var handlers = new EventHandler.EzyEventHandlers(this.client);
-        handlers.addHandler(Const.EzyEventType.CONNECTION_SUCCESS, new EventHandler.EzyConnectionSuccessHandler());
-        handlers.addHandler(Const.EzyEventType.CONNECTION_FAILURE, new EventHandler.EzyConnectionFailureHandler());
-        handlers.addHandler(Const.EzyEventType.DISCONNECTION, new EventHandler.EzyDisconnectionHandler());
+        handlers.addHandler(
+            Const.EzyEventType.CONNECTION_SUCCESS,
+            new EventHandler.EzyConnectionSuccessHandler()
+        );
+        handlers.addHandler(
+            Const.EzyEventType.CONNECTION_FAILURE,
+            new EventHandler.EzyConnectionFailureHandler()
+        );
+        handlers.addHandler(
+            Const.EzyEventType.DISCONNECTION,
+            new EventHandler.EzyDisconnectionHandler()
+        );
         return handlers;
     }
 
     newDataHandlers() {
         var handlers = new DataHandler.EzyDataHandlers(this.client);
-        handlers.addHandler(Const.EzyCommand.PONG, new DataHandler.EzyPongHandler());
-        handlers.addHandler(Const.EzyCommand.HANDSHAKE, new DataHandler.EzyHandshakeHandler());
-        handlers.addHandler(Const.EzyCommand.LOGIN, new DataHandler.EzyLoginSuccessHandler());
-        handlers.addHandler(Const.EzyCommand.LOGIN_ERROR, new DataHandler.EzyLoginErrorHandler());
-        handlers.addHandler(Const.EzyCommand.APP_ACCESS, new DataHandler.EzyAppAccessHandler());
-        handlers.addHandler(Const.EzyCommand.APP_REQUEST, new DataHandler.EzyAppResponseHandler());
-        handlers.addHandler(Const.EzyCommand.APP_EXIT, new DataHandler.EzyAppExitHandler());
-        handlers.addHandler(Const.EzyCommand.PLUGIN_INFO, new DataHandler.EzyPluginInfoHandler());
-        handlers.addHandler(Const.EzyCommand.PLUGIN_REQUEST, new DataHandler.EzyPluginResponseHandler());
+        handlers.addHandler(
+            Const.EzyCommand.PONG,
+            new DataHandler.EzyPongHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.HANDSHAKE,
+            new DataHandler.EzyHandshakeHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.LOGIN,
+            new DataHandler.EzyLoginSuccessHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.LOGIN_ERROR,
+            new DataHandler.EzyLoginErrorHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.APP_ACCESS,
+            new DataHandler.EzyAppAccessHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.APP_REQUEST,
+            new DataHandler.EzyAppResponseHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.APP_EXIT,
+            new DataHandler.EzyAppExitHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.PLUGIN_INFO,
+            new DataHandler.EzyPluginInfoHandler()
+        );
+        handlers.addHandler(
+            Const.EzyCommand.PLUGIN_REQUEST,
+            new DataHandler.EzyPluginResponseHandler()
+        );
         return handlers;
     }
 
@@ -144,25 +173,25 @@ export class EzyHandlerManager {
     }
 
     getAppDataHandlers(appName) {
-        var answer = this.appDataHandlerss[appName];
-        if(!answer) {
+        var answer = this.appDataHandlersByName[appName];
+        if (!answer) {
             answer = new DataHandler.EzyAppDataHandlers();
-            this.appDataHandlerss[appName] = answer;
+            this.appDataHandlersByName[appName] = answer;
         }
         return answer;
     }
 
     getPluginDataHandlers(pluginName) {
-        var answer = this.pluginDataHandlerss[pluginName];
-        if(!answer) {
+        var answer = this.pluginDataHandlersByName[pluginName];
+        if (!answer) {
             answer = new DataHandler.EzyPluginDataHandlers();
-            this.pluginDataHandlerss[pluginName] = answer;
+            this.pluginDataHandlersByName[pluginName] = answer;
         }
         return answer;
     }
 
     addDataHandler(cmd, dataHandler) {
-       this.dataHandlers.addHandler(cmd, dataHandler);
+        this.dataHandlers.addHandler(cmd, dataHandler);
     }
 
     addEventHandler(eventType, eventHandler) {
@@ -170,4 +199,9 @@ export class EzyHandlerManager {
     }
 }
 
-export default {EzyAppManager, EzyPluginManager, EzyPingManager, EzyHandlerManager}
+export default {
+    EzyAppManager,
+    EzyPluginManager,
+    EzyPingManager,
+    EzyHandlerManager,
+};

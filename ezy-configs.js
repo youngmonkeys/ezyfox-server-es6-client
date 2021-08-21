@@ -1,7 +1,7 @@
 class EzyClientConfig {
     constructor() {
-        this.zoneName = "";
-        this.clientName = "";
+        this.zoneName = '';
+        this.clientName = '';
         this.reconnect = new EzyReconnectConfig();
     }
 
@@ -10,8 +10,7 @@ class EzyClientConfig {
      * @returns {string} Client name
      */
     getClientName() {
-        if (this.clientName == "")
-            return this.zoneName;
+        if (this.clientName === '') return this.zoneName;
         return this.clientName;
     }
 }
@@ -24,4 +23,4 @@ class EzyReconnectConfig {
     }
 }
 
-export default {EzyClientConfig}
+export default { EzyClientConfig };

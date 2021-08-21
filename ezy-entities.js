@@ -17,7 +17,7 @@ export class EzyZone {
         this.name = name;
         this.client = client;
         this.appManager = client.newAppManager(name);
-        this.appManager = client.newPluginManager(name);
+        this.pluginManager = client.newPluginManager(name);
     }
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "ezyfox-es6-client",
-  "version": "1.2.0",
-  "description": "ezyfox client use ECMAScript 6",
+  "version": "1.2.1",
+  "description": "EzyFox Server's client SDK use ECMAScript 6",
   "main": "index.js",
   "scripts": {
     "test": "test",

@@ -4,7 +4,7 @@ import Util from './ezy-util';
 export class EzyConnectionSuccessHandler {
     constructor() {
         this.clientType = 'JSEMACS6';
-        this.clientVersion = '1.2.0';
+        this.clientVersion = '1.2.1';
     }
 
     handle() {
@@ -66,7 +66,7 @@ export class EzyConnectionFailureHandler {
         if (reconnecting) {
             this.onReconnecting(event);
         } else {
-            this.onDisconnected(event);
+            this.onConnectionFailed(event);
         }
         this.postHandle(event);
     }
@@ -77,7 +77,7 @@ export class EzyConnectionFailureHandler {
 
     onReconnecting(event) {}
 
-    onDisconnected(event) {}
+    onConnectionFailed(event) {}
 
     postHandle(event) {}
 }

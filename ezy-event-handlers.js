@@ -4,7 +4,7 @@ import Util from './ezy-util';
 export class EzyConnectionSuccessHandler {
     constructor() {
         this.clientType = 'JSEMACS6';
-        this.clientVersion = '1.0.0';
+        this.clientVersion = '1.2.0';
     }
 
     handle() {

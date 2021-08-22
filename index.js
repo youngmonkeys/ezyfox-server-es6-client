@@ -21,6 +21,7 @@ const Ezy = {
     ConnectionStatus: Const.EzyConnectionStatus,
     EventType: Const.EzyEventType,
     ClientConfig: Config.EzyClientConfig,
+    Config: Config.EzyClientConfig,
     ConnectionSuccessHandler: EventHandler.EzyConnectionSuccessHandler,
     ConnectionFailureHandler: EventHandler.EzyConnectionFailureHandler,
     DisconnectionHandler: EventHandler.EzyDisconnectionHandler,

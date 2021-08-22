@@ -9,6 +9,12 @@ javascript emacs 6 client for ezyfox server
 
 [https://youngmonkeys.org/ezyfox-es6-client-sdk/](https://youngmonkeys.org/ezyfox-es6-client-sdk/)
 
+# Installation
+
+```
+npm i ezyfox-es6-client
+```
+
 # Code Example
 
 You can find the full example [here](https://github.com/youngmonkeys/freechat/tree/master/reactjs/src/socket)
@@ -21,7 +27,7 @@ var clients = Ezy.Clients.getInstance();
 var client = clients.newDefaultClient(config);
 ```
 
-**2. Setup ws client***
+**2. Setup ws client**
 
 ```javascript
 var setup = client.setup;
@@ -41,8 +47,20 @@ setupApp.addDataHandler("command", function(app, data) {
 client.connect("ws://localhost:2208/ws");
 ```
 
-# Installation
+# Used By
 
-```
-npm i ezyfox-es6-client
-```
+1. [Freechat](https://youngmonkeys.org/asset/freechat/)
+
+# Tutorials
+
+1. [EzyChat with ReactJS](https://youtube.com/playlist?list=PLlZavoxtKE1IfKY7ohkLLyv6YkHMkvH6G)
+
+# Contact us
+
+- Touch us on [Facebook](https://www.facebook.com/youngmonkeys.org)
+- Ask us on [stackask.com](https://stackask.com)
+- Email to me [Dzung](mailto:itprono3@gmail.com)
+
+# License
+
+Apache License, Version 2.0

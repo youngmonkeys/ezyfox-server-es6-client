@@ -49,7 +49,7 @@ client.connect("ws://localhost:2208/ws");
 
 # Used By
 
-1. [Freechat](https://youngmonkeys.org/asset/freechat/)
+1. [Freechat]([https://youngmonkeys.org/asset/freechat/](https://github.com/youngmonkeys/freechat))
 
 # Tutorials
 
